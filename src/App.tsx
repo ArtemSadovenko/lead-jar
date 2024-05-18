@@ -1,25 +1,60 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+
+import {RouterProvider, createBrowserRouter} from "react-router-dom"
+import AuthPage from './pages/AuthPage';
+import Dashboard from './pages/Dashboard';
+import AssistantPage from './pages/AssistantPage';
+import LeadsPage from './pages/LeadsPage';
+import BlogPage from './pages/BlogPage';
+import TemplatesPage from './pages/TemplatesPage';
+import TeamPage from "./pages/TeamPage"
+import Container from '@mui/material/Container'
+import Home from './pages/Home';
+
+const router = createBrowserRouter([
+  {
+    path:"/",
+    element: <Home/>
+  },
+  {
+    path:"/dashboard",
+    element:<Dashboard/>,
+    children:[
+      {
+        path:"/dashboard/ai-assistant",
+        element:<AssistantPage/>
+      },
+      {
+        path:"/dashboard/leads",
+        element: <LeadsPage/>
+      },
+      {
+        path: "/dashboard/blog",
+        element: <BlogPage/>
+      },
+      {
+        path: "/dashboard/templates",
+        element: <TemplatesPage/>
+      },
+      {
+        path: "/dashboard/team",
+        element: <TeamPage/>
+      },
+    ]
+  },
+  {
+    path:"/login",
+    element:<AuthPage/>
+  }
+])
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  <Container maxWidth="lg" style={{margin: 0, padding: 0}}>
+    <RouterProvider router={router}/>
+  </Container>
   );
 }
 
