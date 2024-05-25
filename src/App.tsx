@@ -20,7 +20,7 @@ const router = createBrowserRouter([
   {
     path:"/dashboard",
     element:<Dashboard/>,
-    children:[
+  },
       {
         path:"/dashboard/ai-assistant",
         element:<AssistantPage/>
@@ -41,8 +41,8 @@ const router = createBrowserRouter([
         path: "/dashboard/team",
         element: <TeamPage/>
       },
-    ]
-  },
+    
+  
   {
     path:"/login",
     element:<AuthPage/>

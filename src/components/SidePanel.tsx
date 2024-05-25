@@ -15,33 +15,33 @@ function SidePanel() {
     <Container maxWidth="lg" className="SidePanel" sx={{paddingTop: 4}}>
       <ul style={{margin: 0}}>
         <li>
-          <Link to={"/"} className='no-hoover-link'>
+          <Link to={"/dashboard/ai-assistant"} className='no-hoover-link'>
             <AiAssistantIcon/>
             <div >Ai Assistant</div>
           </Link>
         </li>
         <li>
-          
-          <Link  to={"/"} className='no-hoover-link'>
+
+          <Link  to={"/dashboard/leads"} className='no-hoover-link'>
             <LeadsIcon/>
             <div>Leads</div>
           </Link>
           
         </li>
         <li>
-          <Link to={"/"} className='no-hoover-link'>
+          <Link to={"/dashboard/blog"} className='no-hoover-link'>
             <BlogIcon/>
             <div>Blog</div>
           </Link>
         </li>
         <li>
-          <Link to={"/"} className='no-hoover-link'>
+          <Link to={"/dashboard/templates"} className='no-hoover-link'>
             <TemplateIcon/>
             <div>Templates</div>
           </Link>
         </li>
         <li>
-          <Link to={"/"} className='no-hoover-link'>
+          <Link to={"/dashboard/team"} className='no-hoover-link'>
             <TeamIcon/>
             <div>Team</div>
           </Link>
