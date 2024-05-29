@@ -1,27 +1,20 @@
-import React from 'react'
-import Container from '@mui/material/Container'
-import Grid from '@mui/material/Grid'
-import SidePanel from '../components/SidePanel'
-import SearchPanel from '../components/SearchPanel'
-import TopBar from '../components/TopBar'
-import TextField from '@mui/material/TextField'
-import { Height } from '@mui/icons-material'
-
+import React from "react";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import SidePanel from "../components/SidePanel";
+import SearchPanel from "../components/SearchPanel";
+import TopBar from "../components/TopBar";
+import TextField from "@mui/material/TextField";
+import { Height } from "@mui/icons-material";
 
 function AssistantPage() {
   return (
-
-
-    <Container maxWidth="lg" style={{padding: 0}}>
-      <Grid container spacing={3} sx={{padding: 0}}>
-        <SidePanel/>
+    <Container maxWidth="lg" style={{ padding: 0 }}>
+      <Grid container spacing={3} sx={{ padding: 0 }}>
+        <SidePanel />
 
         <Grid item md={9}>
-          <TopBar/>
-          
-
-
-
+          <TopBar />
 
           <h2>Get ideas how to improve your letter with A.I.</h2>
 
@@ -36,46 +29,50 @@ function AssistantPage() {
           /> */}
 
           <textarea
-            placeholder='Enter cover letter link to get response from AI Assistant...' style={{
+            placeholder="Enter cover letter link to get response from AI Assistant..."
+            style={{
               borderRadius: "10px",
               borderColor: "white",
               width: "70vw",
               height: "50vh",
-              resize: "none"
+              resize: "none",
             }}
           />
 
           <h2>Cover Letter Link</h2>
-          <div style={{
-            display: "flex",
-            justifyContent: "start-center"
-          }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "start-center",
+            }}
+          >
             <textarea
-              placeholder='www.examlpe.com'
+              placeholder="www.examlpe.com"
               style={{
                 borderRadius: "10px",
-              borderColor: "#B8BDC5",
-              width: "25vw",
-              height: "4vh",
-              resize: "none",
-              verticalAlign: "center"
+                borderColor: "#B8BDC5",
+                width: "25vw",
+                height: "4vh",
+                resize: "none",
+                verticalAlign: "center",
               }}
             />
-            <button style={{
+            <button
+              style={{
                 backgroundColor: "#A0C1B9",
                 width: "90px",
                 marginLeft: "20px",
                 border: "none",
-                borderRadius: "10px"
-            }}>Send</button>
+                borderRadius: "10px",
+              }}
+            >
+              Send
+            </button>
           </div>
-
-
-
-        </Grid>  
+        </Grid>
       </Grid>
     </Container>
-  )
+  );
 }
 
-export default AssistantPage
+export default AssistantPage;
