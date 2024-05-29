@@ -8,12 +8,14 @@
   }
   
   .authForm {
+
+    border: solid 1px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: #e7e7ed;
-    height: 80vh;
+    height: 90vh;
     width: 30vw;
     border-radius: 20px;
     

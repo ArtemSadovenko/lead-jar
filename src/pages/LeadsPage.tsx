@@ -31,20 +31,22 @@ function createData(
   status: string,
   timeSent: string,
   name: string,
-  url: string
+  url: string,
+  role: string
 ) {
-  return { leadGen, date, datePosted, status, timeSent, name, url };
+  return { leadGen, date, datePosted, status, timeSent, name, url, role };
 }
 
 const rows = [
   createData(
-    "Wade",
-    "01.04.2024",
-    "03.04.2024",
+    "Mat",
+    "02.04.2024",
+    "03.07.2024",
     "PROPOSAL SENT",
-    "12.00 - 14.00",
+    "11.00 - 14.00",
     "Landing",
-    "www.com"
+    "www.com",
+    "Lead generator"
   ),
   createData(
     "Wade",
@@ -52,53 +54,59 @@ const rows = [
     "03.04.2024",
     "PROPOSAL SENT",
     "12.00 - 14.00",
-    "Landing",
-    "www.com"
+    "WebFlow",
+    "www.com",
+    "Lead generator"
   ),
   createData(
-    "Wade",
+    "Robert",
+    "01.04.2024",
+    "03.04.2024",
+    "PROPOSAL SENT",
+    "12.00 - 19.00",
+    "Tilda",
+    "www.com",
+    "Lead generator"
+  ),
+  createData(
+    "Phill",
+    "01.04.2024",
+    "03.04.2024",
+    "PROPOSAL SENT",
+    "12.00 - 14.00",
+    "Lead generatorOps",
+    "www.com",
+    "Admin"
+  ),
+  createData(
+    "Ada",
+    "01.04.2024",
+    "03.04.2024",
+    "PROPOSAL SENT",
+    "10.00 - 12.00",
+    "WordPress",
+    "www.com",
+    "Admin"
+  ),
+  createData(
+    "Kate",
     "01.04.2024",
     "03.04.2024",
     "PROPOSAL SENT",
     "12.00 - 14.00",
     "Landing",
-    "www.com"
+    "www.com",
+    "Sales maneger"
   ),
   createData(
-    "Wade",
+    "Andrey",
     "01.04.2024",
     "03.04.2024",
     "PROPOSAL SENT",
     "12.00 - 14.00",
     "Landing",
-    "www.com"
-  ),
-  createData(
-    "Wade",
-    "01.04.2024",
-    "03.04.2024",
-    "PROPOSAL SENT",
-    "12.00 - 14.00",
-    "Landing",
-    "www.com"
-  ),
-  createData(
-    "Wade",
-    "01.04.2024",
-    "03.04.2024",
-    "PROPOSAL SENT",
-    "12.00 - 14.00",
-    "Landing",
-    "www.com"
-  ),
-  createData(
-    "Wade",
-    "01.04.2024",
-    "03.04.2024",
-    "PROPOSAL SENT",
-    "12.00 - 14.00",
-    "Landing",
-    "www.com"
+    "www.com",
+    "Sales maneger"
   ),
 ];
 
@@ -171,17 +179,17 @@ function LeadsPage() {
                   label="Any"
                   // onChange={handleChange}
                 >
-                  <MenuItem value={10}>Dev</MenuItem>
-                  <MenuItem value={20}>User</MenuItem>
+                  <MenuItem value={10}>Lead generator</MenuItem>
+                  <MenuItem value={20}>Sales maneger</MenuItem>
                   <MenuItem value={30}>Admin</MenuItem>
                 </Select>
               </FormControl>
             </div>
 
-            <div style={{  padding: "50px 10px 10px 10px " }}>
-              <TableContainer component={Paper} >
+            <div style={{  padding: "50px 10px 10px 10px " } }>
+              <TableContainer component={Paper} sx={{minWidth: "70vw"}}>
                 <Table
-                  sx={{ minWidth: 650 }}
+                  sx={{ minWidth: 900 }}
                   // size="small"
                   aria-label="a dense table"
                 >
@@ -194,10 +202,12 @@ function LeadsPage() {
                       <TableCell align="left">TIME SENT</TableCell>
                       <TableCell align="left">NAME</TableCell>
                       <TableCell align="left">URL</TableCell>
+                      <TableCell align="left">ROLE</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {rows.map((row) => (
+                      row.role == 'Admin'?(
                       <TableRow
                         key={row.name}
                         sx={{
@@ -212,19 +222,20 @@ function LeadsPage() {
                             backgroundColor: "#E1F7F4",
                             color:"#269E8C",
                             borderRadius: "10px",
-                            padding:"0px 0px 0px 10px"
+                            padding:"5px 0px 5px 10px"
                           }}> {row.status}</p></TableCell>
                         <TableCell align="left"><p
                           style={{
                             backgroundColor: "#F6E5D6",
                             color:"#E46027",
                             borderRadius: "10px",
-                            padding:"0px 0px 0px 5px"
+                            padding:"5px 0px 5px 5px"
                           }}
                         >{row.timeSent}</p></TableCell>
                         <TableCell align="left">{row.name}</TableCell>
                         <TableCell align="left">{row.url}</TableCell>
-                      </TableRow>
+                        <TableCell align="left">{row.role}</TableCell>
+                      </TableRow>):null
                     ))}
                   </TableBody>
                 </Table>

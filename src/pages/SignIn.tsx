@@ -1,63 +1,63 @@
 import React from "react";
-import { InputBase } from "@mui/material";
+import { Button, InputBase, TextField, Typography } from "@mui/material";
 import "./SignIn.css";
 import { Link, useNavigate } from "react-router-dom";
+import Alert from "@mui/material/Alert";
 
 function SingIn() {
   const nav = useNavigate();
 
-  const routeToDash = () =>{
-    nav("/dashboard")
-  }
+  const routeToDash = () => {
+    nav("/dashboard");
+  };
 
   return (
     <div className="root">
       <div className="authForm">
-        <h1>Lead Jar</h1>
+        <h1>Sign In</h1>
 
         <br />
-        <InputBase
+
+        <TextField
+          id="textField"
+          label="Email"
           sx={{
-            width: "17vw",
-            height: "6vh",
-            border: "solid 1px",
             borderRadius: "10px",
-            padding: "0px 5px 0px 10px",
             backgroundColor: "#f5f5fa",
-            margin: "10px 0px 4px 0px"
+            margin: "10px 0px 4px 0px",
           }}
-          placeholder="Email"
-        ></InputBase>
+          placeholder="Enter email"
+        ></TextField>
+
         <br />
-        <InputBase
+        <TextField
+          id="pass"
+          label="Password"
+          itemType="password"
           sx={{
-            width: "17vw",
-            height: "6vh",
-            border: "solid 1px",
-            borderRadius: "10px",
-            padding: "0px 5px 0px 10px",
             backgroundColor: "#f5f5fa",
-
-            margin: "5px 0px 15px 0px"
           }}
-          placeholder="Password"
-        ></InputBase>
-
-        <button
+          placeholder="Enter Password"
+          type="password"
+        ></TextField>
+        
+        {/* <Alert sx={{marginTop: "20px", width: "200px"}}  severity="error">Please enter a valid email address</Alert> */}
+        <Button
           onClick={routeToDash}
-          style={{
-            width: "17vw",
-            height: "6vh",
-            border: "solid 1px",
-            borderRadius: "10px",
-            margin: "10px 0px 10px 0px"
-          }}  
-        >Login</button>
+          variant="contained"
+          sx={{
+            m: "30px 0px 20px 0px",
+            backgroundColor: "#706993",
+            width: "220px",
+          }}
+        >
+          Sign In
+        </Button>
 
         <div style={{ display: "flex", flexDirection: "row" }}>
-          <p>Dont have an account? </p>
-          <Link to={"/login/sign-up"} >
-            <p>create it</p>
+          <p>Dont have an account?&nbsp;&nbsp; </p>
+          <Link to={"/login/sign-up"}>
+            <p> Sign In</p>
           </Link>
         </div>
       </div>

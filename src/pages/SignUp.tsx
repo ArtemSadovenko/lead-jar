@@ -1,5 +1,5 @@
 import React from "react";
-import { InputBase } from "@mui/material";
+import { InputBase, Button, TextField, Alert } from "@mui/material";
 import "./SignUp.css";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -13,65 +13,65 @@ function SignUp() {
   return (
     <div className="root">
       <div className="authForm">
-      <h2>Sign Up To</h2>
-    <h1>Lead Jar</h1>
+        <h1>Sign Up</h1>
 
-        <br />
-        <InputBase
+        <TextField
+          id="textField"
+          label="Email"
           sx={{
-            width: "17vw",
-            height: "6vh",
-            border: "solid 1px",
             borderRadius: "10px",
-            padding: "0px 5px 0px 10px",
             backgroundColor: "#f5f5fa",
-            margin: "10px 0px 4px 0px",
-          }}
-          placeholder="Email"
-        ></InputBase>
-        <br />
-        <InputBase
-          type="password"
-          sx={{
-            width: "17vw",
-            height: "6vh",
-            border: "solid 1px",
-            borderRadius: "10px",
-            padding: "0px 5px 0px 10px",
-            backgroundColor: "#f5f5fa",
-
-            margin: "5px 0px 15px 0px",
-          }}
-          placeholder="Password"
-        ></InputBase>
-
-        <InputBase
-          type="password"
-          sx={{
-            width: "17vw",
-            height: "6vh",
-            border: "solid 1px",
-            borderRadius: "10px",
-            padding: "0px 5px 0px 10px",
-            backgroundColor: "#f5f5fa",
-
-            margin: "5px 0px 15px 0px",
-          }}
-          placeholder="Repeat Password"
-        ></InputBase>
-
-        <button
-          onClick={routeToDash}
-          style={{
-            width: "17vw",
-            height: "6vh",
-            border: "solid 1px",
-            borderRadius: "10px",
             margin: "10px 0px 10px 0px",
           }}
+          placeholder="Enter email"
+        ></TextField>
+
+        <TextField
+          id="pass"
+          label="Password"
+          itemType="password"
+          sx={{
+            backgroundColor: "#f5f5fa",
+          }}
+          placeholder="Enter Password"
+          type="password"
+        ></TextField>
+
+        <TextField
+          id="pass"
+          label="Confirm Password"
+          itemType="password"
+          sx={{
+            borderRadius: "10px",
+            backgroundColor: "#f5f5fa",
+            margin: "10px 0px 10px 0px"
+          }}
+          placeholder="Enter Password"
+          type="password"
+        ></TextField>
+
+
+{/* <Alert sx={{marginTop: "20px", width: "200px"}}  severity="error">Passwords should match</Alert> */}
+        
+
+        <Button
+          variant="contained"
+          onClick={routeToDash}
+          sx={{
+            m: "30px 0px 20px 0px",
+            backgroundColor: "#706993",
+            width: "220px",
+          }}
         >
-          Confirm
-        </button>
+          Sign Up
+        </Button>
+
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <p>Already have an account?&nbsp;&nbsp; </p>
+          <Link to={"/login/sign-up"}>
+            <p> Sign In</p>
+          </Link>
+        </div>
       </div>
     </div>
   );
