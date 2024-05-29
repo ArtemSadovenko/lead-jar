@@ -1,0 +1,21 @@
+.root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: #f5f5fa;
+  }
+  
+  .authForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #e7e7ed;
+    height: 80vh;
+    width: 30vw;
+    border-radius: 20px;
+    
+  }
+  
