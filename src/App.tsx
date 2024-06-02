@@ -13,6 +13,7 @@ import TeamPage from "./pages/TeamPage";
 import Container from "@mui/material/Container";
 import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
+import CreateLeadPage from "./pages/CreateLeadPage";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
   {
     path:"/login/sign-up",
     element: <SignUp/>
+  },
+  {
+    path: "/dashboard/leads/create",
+    element: <CreateLeadPage/>
   }
 ]);
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import SidePanel from "../components/SidePanel";
@@ -20,6 +20,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { useData, writeData} from "../hooks/useData"
+
 
 
 
@@ -110,7 +112,15 @@ const rows = [
   ),
 ];
 
+
+
+
+
 function LeadsPage() {
+  let leads = useData()
+  console.log(leads)
+
+
   return (
     <Container maxWidth="lg" style={{ padding: 0 }}>
       <Grid container spacing={3} sx={{ padding: 0 }}>
@@ -206,8 +216,8 @@ function LeadsPage() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {rows.map((row) => (
-                      row.role == 'Admin'?(
+                    {leads.map((row) => (
+                      // row.role == 'Sales maneger'?(
                       <TableRow
                         key={row.name}
                         sx={{
@@ -235,7 +245,8 @@ function LeadsPage() {
                         <TableCell align="left">{row.name}</TableCell>
                         <TableCell align="left">{row.url}</TableCell>
                         <TableCell align="left">{row.role}</TableCell>
-                      </TableRow>):null
+                      </TableRow>
+                      // ):null
                     ))}
                   </TableBody>
                 </Table>
