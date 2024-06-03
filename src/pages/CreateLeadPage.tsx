@@ -21,9 +21,8 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-
-import { writeData } from "../hooks/useData";
-
+import Database from "../backend/database";
+import Leads from "../backend/Leads";
 
 
 
@@ -47,6 +46,8 @@ function CreateLeadPage() {
   const [datePostedFormatError, setDatePostedFormatError] = useState(false);
   const [hireError, setHireError] = useState(false);
   const [urlError, setUrlError] = useState(false);
+
+  const db = new Database('thebest')
 
   let newLead = {
     leadGen: { leadgen },
@@ -402,7 +403,21 @@ function CreateLeadPage() {
                       } else {
                         setGlobalError(false);
                         setSuccess(true);
-                        writeData(newLead)
+                        db.create({
+                          leadgen : leadgen,
+                          date : date,
+                          datePosted : datePosted,
+                          status : status,
+                          time : time,
+                          name : name,
+                          url : url,
+                          hire : rate,
+                        })
+                        // db.create(
+                        //   {
+                        //     leadgen, date, datePosted, status, time, name, url
+                        //   }
+                        // )
                       }
                     }}
                   >

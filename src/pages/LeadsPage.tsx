@@ -4,6 +4,7 @@ import Grid from "@mui/material/Grid";
 import SidePanel from "../components/SidePanel";
 import TopBar from "../components/TopBar";
 import {
+  Button,
   InputBase,
   IconButton,
   FormControl,
@@ -20,106 +21,20 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useData, writeData} from "../hooks/useData"
-
-
-
-
-
-function createData(
-  leadGen: string,
-  date: string,
-  datePosted: string,
-  status: string,
-  timeSent: string,
-  name: string,
-  url: string,
-  role: string
-) {
-  return { leadGen, date, datePosted, status, timeSent, name, url, role };
-}
-
-const rows = [
-  createData(
-    "Mat",
-    "02.04.2024",
-    "03.07.2024",
-    "PROPOSAL SENT",
-    "11.00 - 14.00",
-    "Landing",
-    "www.com",
-    "Lead generator"
-  ),
-  createData(
-    "Wade",
-    "01.04.2024",
-    "03.04.2024",
-    "PROPOSAL SENT",
-    "12.00 - 14.00",
-    "WebFlow",
-    "www.com",
-    "Lead generator"
-  ),
-  createData(
-    "Robert",
-    "01.04.2024",
-    "03.04.2024",
-    "PROPOSAL SENT",
-    "12.00 - 19.00",
-    "Tilda",
-    "www.com",
-    "Lead generator"
-  ),
-  createData(
-    "Phill",
-    "01.04.2024",
-    "03.04.2024",
-    "PROPOSAL SENT",
-    "12.00 - 14.00",
-    "Lead generatorOps",
-    "www.com",
-    "Admin"
-  ),
-  createData(
-    "Ada",
-    "01.04.2024",
-    "03.04.2024",
-    "PROPOSAL SENT",
-    "10.00 - 12.00",
-    "WordPress",
-    "www.com",
-    "Admin"
-  ),
-  createData(
-    "Kate",
-    "01.04.2024",
-    "03.04.2024",
-    "PROPOSAL SENT",
-    "12.00 - 14.00",
-    "Landing",
-    "www.com",
-    "Sales maneger"
-  ),
-  createData(
-    "Andrey",
-    "01.04.2024",
-    "03.04.2024",
-    "PROPOSAL SENT",
-    "12.00 - 14.00",
-    "Landing",
-    "www.com",
-    "Sales maneger"
-  ),
-];
-
-
-
-
+import Database from "../backend/database";
+import Leads from "../backend/Leads";
+import useRunOnce from "../hooks/userRunOnce";
 
 function LeadsPage() {
-  let leads = useData()
-  console.log(leads)
+  const [list, setList] = useState<Leads[]>([]);
 
+  const db = new Database('thebest')
+
+  useRunOnce({
+    fn: () => {
+      setList(db.read())
+    }
+  }, []);
 
   return (
     <Container maxWidth="lg" style={{ padding: 0 }}>
@@ -196,8 +111,8 @@ function LeadsPage() {
               </FormControl>
             </div>
 
-            <div style={{  padding: "50px 10px 10px 10px " } }>
-              <TableContainer component={Paper} sx={{minWidth: "70vw"}}>
+            <div style={{ padding: "50px 10px 10px 10px " }}>
+              <TableContainer component={Paper} sx={{ minWidth: "70vw" }}>
                 <Table
                   sx={{ minWidth: 900 }}
                   // size="small"
@@ -216,35 +131,48 @@ function LeadsPage() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {leads.map((row) => (
+                    {list.map((lead) => (
                       // row.role == 'Sales maneger'?(
                       <TableRow
-                        key={row.name}
+                        key={lead.name}
                         sx={{
-                          "&:last-child td, &:last-child th": { border: 0 }
+                          "&:last-child td, &:last-child th": { border: 0 },
                         }}
                       >
-                        <TableCell component="th" scope="row"  >{row.leadGen}</TableCell>
-                        <TableCell align="left">{row.date}</TableCell>
-                        <TableCell align="left">{row.datePosted}</TableCell>
-                        <TableCell align="left" > <p 
-                        style={{
-                            backgroundColor: "#E1F7F4",
-                            color:"#269E8C",
-                            borderRadius: "10px",
-                            padding:"5px 0px 5px 10px"
-                          }}> {row.status}</p></TableCell>
-                        <TableCell align="left"><p
-                          style={{
-                            backgroundColor: "#F6E5D6",
-                            color:"#E46027",
-                            borderRadius: "10px",
-                            padding:"5px 0px 5px 5px"
-                          }}
-                        >{row.timeSent}</p></TableCell>
-                        <TableCell align="left">{row.name}</TableCell>
-                        <TableCell align="left">{row.url}</TableCell>
-                        <TableCell align="left">{row.role}</TableCell>
+                        <TableCell component="th" scope="row">
+                          {lead.leadgen}
+                        </TableCell>
+                        <TableCell align="left">{lead.date}</TableCell>
+                        <TableCell align="left">{lead.datePosted}</TableCell>
+                        <TableCell align="left">
+                          {" "}
+                          <p
+                            style={{
+                              backgroundColor: "#E1F7F4",
+                              color: "#269E8C",
+                              borderRadius: "10px",
+                              padding: "5px 0px 5px 10px",
+                            }}
+                          >
+                            {" "}
+                            {lead.status}
+                          </p>
+                        </TableCell>
+                        <TableCell align="left">
+                          <p
+                            style={{
+                              backgroundColor: "#F6E5D6",
+                              color: "#E46027",
+                              borderRadius: "10px",
+                              padding: "5px 0px 5px 5px",
+                            }}
+                          >
+                            {lead.time}
+                          </p>
+                        </TableCell>
+                        <TableCell align="left">{lead.name}</TableCell>
+                        <TableCell align="left">{lead.url}</TableCell>
+                        <TableCell align="left">{"Admin"}</TableCell>
                       </TableRow>
                       // ):null
                     ))}
