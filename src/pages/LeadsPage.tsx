@@ -28,91 +28,91 @@ import DatabaseLeads from "../backend/Database";
 import useRunOnce from "../hooks/useRunOnce";
 import axios from "axios";
 
-// function createData(
-//   leadGen: string,
-//   date: string,
-//   datePosted: string,
-//   status: string,
-//   timeSent: string,
-//   name: string,
-//   url: string,
-//   role: string
-// ) {
-//   return { leadGen, date, datePosted, status, timeSent, name, url, role };
-// }
+function createData(
+  leadGen: string,
+  date: string,
+  datePosted: string,
+  status: string,
+  timeSent: string,
+  name: string,
+  url: string,
+  role: string
+) {
+  return { leadGen, date, datePosted, status, timeSent, name, url, role };
+}
 
-// const rows = [
-//   createData(
-//     "Mat",
-//     "02.04.2024",
-//     "03.07.2024",
-//     "PROPOSAL SENT",
-//     "11.00 - 14.00",
-//     "Landing",
-//     "www.com",
-//     "Lead generator"
-//   ),
-//   createData(
-//     "Wade",
-//     "01.04.2024",
-//     "03.04.2024",
-//     "PROPOSAL SENT",
-//     "12.00 - 14.00",
-//     "WebFlow",
-//     "www.com",
-//     "Lead generator"
-//   ),
-//   createData(
-//     "Robert",
-//     "01.04.2024",
-//     "03.04.2024",
-//     "PROPOSAL SENT",
-//     "12.00 - 19.00",
-//     "Tilda",
-//     "www.com",
-//     "Lead generator"
-//   ),
-//   createData(
-//     "Phill",
-//     "01.04.2024",
-//     "03.04.2024",
-//     "PROPOSAL SENT",
-//     "12.00 - 14.00",
-//     "Lead generatorOps",
-//     "www.com",
-//     "Admin"
-//   ),
-//   createData(
-//     "Ada",
-//     "01.04.2024",
-//     "03.04.2024",
-//     "PROPOSAL SENT",
-//     "10.00 - 12.00",
-//     "WordPress",
-//     "www.com",
-//     "Admin"
-//   ),
-//   createData(
-//     "Kate",
-//     "01.04.2024",
-//     "03.04.2024",
-//     "PROPOSAL SENT",
-//     "12.00 - 14.00",
-//     "Landing",
-//     "www.com",
-//     "Sales maneger"
-//   ),
-//   createData(
-//     "Andrey",
-//     "01.04.2024",
-//     "03.04.2024",
-//     "PROPOSAL SENT",
-//     "12.00 - 14.00",
-//     "Landing",
-//     "www.com",
-//     "Sales maneger"
-//   ),
-// ];
+const leads = [
+  createData(
+    "Mat",
+    "02.04.2024",
+    "03.07.2024",
+    "PROPOSAL SENT",
+    "11.00 - 14.00",
+    "Landing",
+    "www.com",
+    "Lead generator"
+  ),
+  createData(
+    "Wade",
+    "01.04.2024",
+    "03.04.2024",
+    "PROPOSAL SENT",
+    "12.00 - 14.00",
+    "WebFlow",
+    "www.com",
+    "Lead generator"
+  ),
+  createData(
+    "Robert",
+    "01.04.2024",
+    "03.04.2024",
+    "PROPOSAL SENT",
+    "12.00 - 19.00",
+    "Tilda",
+    "www.com",
+    "Lead generator"
+  ),
+  createData(
+    "Phill",
+    "01.04.2024",
+    "03.04.2024",
+    "PROPOSAL SENT",
+    "12.00 - 14.00",
+    "Lead generatorOps",
+    "www.com",
+    "Admin"
+  ),
+  createData(
+    "Ada",
+    "01.04.2024",
+    "03.04.2024",
+    "PROPOSAL SENT",
+    "10.00 - 12.00",
+    "WordPress",
+    "www.com",
+    "Admin"
+  ),
+  createData(
+    "Kate",
+    "01.04.2024",
+    "03.04.2024",
+    "PROPOSAL SENT",
+    "12.00 - 14.00",
+    "Landing",
+    "www.com",
+    "Sales maneger"
+  ),
+  createData(
+    "Andrey",
+    "01.04.2024",
+    "03.04.2024",
+    "PROPOSAL SENT",
+    "12.00 - 14.00",
+    "Landing",
+    "www.com",
+    "Sales maneger"
+  ),
+];
 
 // const leads = [
 //   {
@@ -188,8 +188,8 @@ import axios from "axios";
 // ]
 
 function LeadsPage() {
-  const [leads, setLeads] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [leads, setLeads] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   // const db = new DatabaseLeads();
   // // setLeads(somedata)
   // const addItemToList = () => {
@@ -256,24 +256,24 @@ function LeadsPage() {
   //   load()
   // }, []);
 
-  useEffect(() => {
-    const fetchDataFromBackend = async () => {
-      try {
-        const data = await axios.get('http://localhost:3001/users');;
+  // useEffect(() => {
+  //   const fetchDataFromBackend = async () => {
+  //     try {
+  //       const data = await axios.get('http://localhost:3001/users');;
 
-        console.log(data)
+  //       console.log(data)
         
 
-        setLeads(data.data); // Update leads state
-        setIsLoading(false); // Set loading to false after data is fetched
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setIsLoading(false); // Set loading to false in case of error
-      }
-    };
+  //       setLeads(data.data); // Update leads state
+  //       setIsLoading(false); // Set loading to false after data is fetched
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //       setIsLoading(false); // Set loading to false in case of error
+  //     }
+  //   };
 
-    fetchDataFromBackend(); // Call the fetchData function
-  }, []); // Run this effect only once on component mount
+  //   fetchDataFromBackend(); // Call the fetchData function
+  // }, []); // Run this effect only once on component mount
 
 
 
