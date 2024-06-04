@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { AuthenticatedUserDatabase, UsersDatabase, LeadsDatabase } from "../backend/Database";
+import { AuthenticatedUserDatabase, UsersDatabase, LeadsDatabase } from "../backend/database";
 import Login from "../domain/Login";
 
 import useRunOnce from "../hooks/userRunOnce";

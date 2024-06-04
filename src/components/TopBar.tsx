@@ -6,7 +6,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
 import AddIcon from '@mui/icons-material/Add';
 import useRunOnce from "../hooks/userRunOnce";
-import { AuthenticatedUserDatabase, UsersDatabase } from "../backend/Database";
+import { AuthenticatedUserDatabase, UsersDatabase } from "../backend/database";
 import Login from "../domain/Login";
 
 function TopBar() {
