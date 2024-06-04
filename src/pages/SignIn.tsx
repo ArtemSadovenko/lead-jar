@@ -3,12 +3,42 @@ import { Button, InputBase, TextField, Typography } from "@mui/material";
 import "./SignIn.css";
 import { Link, useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
+import Login from "../domain/Login";
+import { useEffect, useState } from "react";
+import { AuthenticatedUserDatabase, UsersDatabase } from "../backend/Database";
+import {Role} from "../backend/Role"
+import useRunOnce from "../hooks/userRunOnce";
 
 function SingIn() {
   const nav = useNavigate();
 
+  const users = new UsersDatabase()
+  const loginSystem = new Login(new UsersDatabase(), new AuthenticatedUserDatabase())
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const routeToDash = () => {
     nav("/dashboard");
+  };
+
+  // useRunOnce({
+  //   fn: () => {
+  //     users.create({
+  //       email:"ivan.vachilia@gmail.com",
+  //       password:"asdf;lkj",
+  //       role:Role.Admin
+  //     })
+  //   }
+  // }, []);
+
+  const handleLogin = () => {
+    const result = loginSystem.login(email, password);
+    if (typeof result === "string") {
+      setError(result);
+    } else {
+      routeToDash();
+    }
   };
 
   return (
@@ -21,29 +51,32 @@ function SingIn() {
         <TextField
           id="textField"
           label="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           sx={{
             borderRadius: "10px",
             backgroundColor: "#f5f5fa",
             margin: "10px 0px 4px 0px",
           }}
           placeholder="Enter email"
-        ></TextField>
-
-        <br />
+        />
         <TextField
           id="pass"
           label="Password"
-          itemType="password"
-          sx={{
-            backgroundColor: "#f5f5fa",
-          }}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          sx={{ backgroundColor: "#f5f5fa" }}
           placeholder="Enter Password"
           type="password"
-        ></TextField>
-        
+        />
+                {error && (
+          <Alert sx={{ marginTop: "20px", width: "200px" }} severity="error">
+            {error}
+          </Alert>
+        )}
         {/* <Alert sx={{marginTop: "20px", width: "200px"}}  severity="error">Please enter a valid email address</Alert> */}
         <Button
-          onClick={routeToDash}
+          onClick={handleLogin}
           variant="contained"
           sx={{
             m: "30px 0px 20px 0px",

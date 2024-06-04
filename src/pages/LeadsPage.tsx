@@ -21,17 +21,24 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Database from "../backend/database";
+import { AuthenticatedUserDatabase, UsersDatabase, LeadsDatabase } from "../backend/Database";
 import Leads from "../backend/Leads";
 import useRunOnce from "../hooks/userRunOnce";
+import Login from "../domain/Login";
 
 function LeadsPage() {
   const [list, setList] = useState<Leads[]>([]);
+  const [userName, setUserName] = useState<string>("");
 
-  const db = new Database('thebest')
+  const db = new LeadsDatabase()
+  const loginSystem = new Login(new UsersDatabase(), new AuthenticatedUserDatabase())
 
   useRunOnce({
     fn: () => {
+      const user = loginSystem.isAuthenticated()
+      if(user === null) {} else {
+        setUserName(user.email)
+      }
       setList(db.read())
     }
   }, []);
