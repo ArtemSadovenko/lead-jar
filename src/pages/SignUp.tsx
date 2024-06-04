@@ -68,7 +68,7 @@ function SignUp() {
 
         <div style={{ display: "flex", flexDirection: "row" }}>
           <p>Already have an account?&nbsp;&nbsp; </p>
-          <Link to={"/login/sign-up"}>
+          <Link to={"/login/"}>
             <p> Sign In</p>
           </Link>
         </div>
