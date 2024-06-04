@@ -1,12 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import SearchPanel from "./SearchPanel";
 import { Container, Button, IconButton, Grid } from "@mui/material";
 import "./TopBar.css";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
 import AddIcon from '@mui/icons-material/Add';
+import useRunOnce from "../hooks/userRunOnce";
+import { AuthenticatedUserDatabase, UsersDatabase } from "../backend/Database";
+import Login from "../domain/Login";
 
 function TopBar() {
+  const [userName, setUserName] = useState<string>("");
+  const loginSystem = new Login(new UsersDatabase(), new AuthenticatedUserDatabase())
+  useRunOnce({
+    fn: () => {
+      const user = loginSystem.isAuthenticated()
+      if(user === null) {} else {
+        setUserName(user.email)
+      }
+    }
+  }, []);
+
   const navigator = useNavigate();
 
   const redirect = () => {
@@ -34,7 +48,7 @@ function TopBar() {
           variant="outlined"
           startIcon={<AccountCircleIcon />}
         >
-          User
+          {userName}
         </Button>
       </div>
     </div>

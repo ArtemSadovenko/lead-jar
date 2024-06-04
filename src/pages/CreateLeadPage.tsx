@@ -21,12 +21,7 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-
-import { writeData } from "../hooks/useData";
-import DatabaseLeads, { Leads } from "../backend/Database";
-
-
-
+import { LeadsDatabase } from "../backend/Database";
 
 function CreateLeadPage() {
   const [globalError, setGlobalError] = useState(false);
@@ -48,38 +43,8 @@ function CreateLeadPage() {
   const [datePostedFormatError, setDatePostedFormatError] = useState(false);
   const [hireError, setHireError] = useState(false);
   const [urlError, setUrlError] = useState(false);
-  const db = new DatabaseLeads();
 
-  let newLead:Leads = {
-    leadGen: "{ leadgen }",
-    date: "{ date }",
-    datePosted: "{ datePosted }",
-    status: "{ status }",
-    timeSent: "{ time }",
-    name: "{ name }",
-    url: "{ url }",
-    role: ""
-    // role: {role},
-  };
-
-  const write = () => {
-      db.create(newLead);
-  };
-
-  useEffect(() => {
-    newLead = {
-      leadGen: leadgen,
-      date:  date ,
-      datePosted:  datePosted ,
-      status:  status ,
-      timeSent:  time ,
-      name:  name ,
-      url:  url ,
-      role: ""      
-    };
-
-    console.log(newLead);
-  }, [newLead]);
+  const db = new LeadsDatabase()
 
   const check = () => {
     return (
@@ -139,6 +104,7 @@ function CreateLeadPage() {
                       backgroundColor: "#f5f5fa",
                       margin: "16px 32px 16px 32px",
                       borderRadius: "10px",
+                      width: "15em",
                     }}
                     placeholder="Enter Leadgen"
                   ></TextField>
@@ -151,6 +117,7 @@ function CreateLeadPage() {
                       backgroundColor: "#f5f5fa",
                       margin: "16px 32px 16px 32px",
                       borderRadius: "10px",
+                      width: "15em",
                     }}
                     placeholder="dd-mm-yyyy"
                     onChange={(event) => {
@@ -198,6 +165,7 @@ function CreateLeadPage() {
                       backgroundColor: "#f5f5fa",
                       margin: "16px 32px 16px 32px",
                       borderRadius: "10px",
+                      width: "15em",
                     }}
                     placeholder="dd-mm-yyyy"
                     onChange={(event) => {
@@ -240,7 +208,7 @@ function CreateLeadPage() {
                 </Grid>
 
                 <Grid item md={4}>
-                  <TextField
+                  {/* <TextField
                     label="Status"
                     sx={{
                       backgroundColor: "#f5f5fa",
@@ -253,7 +221,38 @@ function CreateLeadPage() {
                     value={status}
                     placeholder="Enter Status"
                     error = {globalError}
-                  ></TextField>
+                  ></TextField> */}
+
+                    <FormControl
+                    size="small"
+                    sx={{
+                      margin: "16px 32px 16px 32px",
+                      width: "15em",
+                      height: "3.5em",
+                    }}
+                  >
+                    <InputLabel sx={{ justifySelf: "center" }}>Proposal Sent</InputLabel>
+                    <Select
+                    error = {globalError}
+                      value={status}
+                      onChange={(event) => {
+                        setStatus(event.target.value);
+                      }}
+                      sx={{
+                        alignItems: "center",
+                        backgroundColor: "#f5f5fa",
+
+                        width: "15em",
+                        height: "3.5em",
+                      }}
+                      label="Select status"
+                    >
+                      <MenuItem value={"Proposal Sent"}>Proposal Sent</MenuItem>
+                      <MenuItem value={"Chatting"}>Chatting</MenuItem>
+                      <MenuItem value={"Viewed"}>Viewed</MenuItem>
+                      <MenuItem value={"In Progress"}>In Progress</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Grid>
 
                 <Grid
@@ -303,6 +302,7 @@ function CreateLeadPage() {
                       backgroundColor: "#f5f5fa",
                       margin: "16px 32px 16px 32px",
                       borderRadius: "10px",
+                      width: "15em",
                     }}
                     onChange={(event) => {
                       setName(event.target.value);
@@ -319,7 +319,7 @@ function CreateLeadPage() {
                       const value = event.target.value;
                       setUrl(value);
                       const dateFormatRegex =
-                        /^(https?:\/\/)?([\w-]+\.)*([\w-]+)(\.[a-z]{2,})((\/\w+)*\/)?(\?\w+=\w+(&\w+=\w+)*)?$/;
+                        /\b((?:https?|ftp):\/\/[^\s/$.?#].[^\s]*)\b/;
                       if (dateFormatRegex.test(value)) {
                         setUrl(value);
                         setUrlError(false);
@@ -334,6 +334,7 @@ function CreateLeadPage() {
                       backgroundColor: "#f5f5fa",
                       margin: "16px 32px 16px 32px",
                       borderRadius: "10px",
+                      width: "15em",
                     }}
                     placeholder="Enter URL"
                     helperText={urlError ? "Invalid link" : ""}
@@ -405,7 +406,16 @@ function CreateLeadPage() {
                       } else {
                         setGlobalError(false);
                         setSuccess(true);
-                        write()
+                        db.create({
+                          leadgen : leadgen,
+                          date : date,
+                          datePosted : datePosted,
+                          status : status,
+                          time : time,
+                          name : name,
+                          url : url,
+                          hire : rate,
+                        })
                       }
                     }}
                   >
