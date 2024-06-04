@@ -14,10 +14,7 @@ import {
   Box,
 } from "@mui/material";
 import SearchIcon from "../statis/icons/SearchIcon";
-// import { AuthenticatedUserDatabase, UsersDatabase, LeadsDatabase } from "../backend/Database";
-import AuthenticatedUserDatabase from "../backend/Database";
-import LeadsDatabase from "../backend/Database";
-import UsersDatabase from "../backend/Database";
+import { AuthenticatedUserDatabase, UsersDatabase, LeadsDatabase } from "../backend/Database";
 import Login from "../domain/Login";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -29,9 +26,6 @@ import Paper from "@mui/material/Paper";
 import { fetchData , writeData } from "../hooks/useData";
 import Skeleton from "@mui/material/Skeleton";
 import useRunOnce from "../hooks/useRunOnce";
-import axios from "axios";
-import {Role} from "../backend/Role";
-
 import Leads from "../backend/Leads";
 
 
@@ -49,7 +43,8 @@ function LeadsPage() {
       if(user === null) {} else {
         setUserName(user.email)
       }
-      setList(db.read())
+      const a = db.read()
+      setList(a)
     }
   }, []);
 

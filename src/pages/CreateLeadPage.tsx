@@ -21,8 +21,7 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import LeadsDatabase from "../backend/Database";
-
+import { LeadsDatabase } from "../backend/Database";
 
 function CreateLeadPage() {
   const [globalError, setGlobalError] = useState(false);
