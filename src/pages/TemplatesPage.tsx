@@ -49,6 +49,22 @@ function TemplatesPage() {
         <TopBar/>
         <Container className='content'>
           <Grid container>
+            <Grid item md={6} lg={6}>
+              <div style={{
+                    width: "30vp",
+                    height: "25vh",
+                    backgroundColor: "#FFFFFF",
+                    margin: "12px 12px 6px 12px",
+                    padding: "6px 12px 6px 12px",
+                    borderRadius: "15px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center"
+              }}>
+                <h1>Hui</h1>
+              </div>
+            </Grid>
             {
               content.map((draft) =>  (
                 <TemplateCard id={draft.id} text={draft.text}></TemplateCard>

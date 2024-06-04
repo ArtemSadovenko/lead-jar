@@ -16,7 +16,7 @@
 .overflowText {
     overflow: hidden;
     text-overflow: ellipsis;
-    height: 60px;
+    height: 40px;
 
     
 }
@@ -29,7 +29,7 @@
 }
 
 .cardTop{
-    width: 22rem;
+    width: 17rem;
     display: flex;
     justify-content: space-between;
     
