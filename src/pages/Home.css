@@ -1,0 +1,33 @@
+.oot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #2C2B2B;
+}
+
+.chooseLine {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: #191716;
+  height: auto;
+  width: auto;
+  border-radius: 40px;
+}
+
+.path {
+  border-radius: 40px;
+  padding: 20px 40px 20px 40px;
+  margin: 16px 16px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.path:hover{
+  background-color: #2C2B2B;
+}

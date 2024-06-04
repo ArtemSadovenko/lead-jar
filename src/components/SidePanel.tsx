@@ -16,33 +16,33 @@ function SidePanel() {
       <ul style={{margin: 0}}>
         <li>
           <Link to={"/dashboard/ai-assistant"} className='no-hoover-link'>
-            <AiAssistantIcon/>
+            <AiAssistantIcon scale = {24}/>
             <div >Ai Assistant</div>
           </Link>
         </li>
         <li>
 
           <Link  to={"/dashboard/leads"} className='no-hoover-link'>
-            <LeadsIcon/>
+            <LeadsIcon scale={24}/>
             <div>Leads</div>
           </Link>
           
         </li>
         <li>
           <Link to={"/dashboard/blog"} className='no-hoover-link'>
-            <BlogIcon/>
+            <BlogIcon scale = {24}/>
             <div>Blog</div>
           </Link>
         </li>
         <li>
           <Link to={"/dashboard/templates"} className='no-hoover-link'>
-            <TemplateIcon/>
+            <TemplateIcon scale = {24}/>
             <div>Templates</div>
           </Link>
         </li>
         <li>
           <Link to={"/dashboard/team"} className='no-hoover-link'>
-            <TeamIcon/>
+            <TeamIcon scale = {24}/>
             <div>Team</div>
           </Link>
         </li>

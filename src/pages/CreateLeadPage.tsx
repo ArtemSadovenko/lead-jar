@@ -23,6 +23,7 @@ import {
 } from "@mui/material";
 
 import { writeData } from "../hooks/useData";
+import DatabaseLeads, { Leads } from "../backend/Database";
 
 
 
@@ -47,32 +48,34 @@ function CreateLeadPage() {
   const [datePostedFormatError, setDatePostedFormatError] = useState(false);
   const [hireError, setHireError] = useState(false);
   const [urlError, setUrlError] = useState(false);
+  const db = new DatabaseLeads();
 
-  let newLead = {
-    leadGen: { leadgen },
-    date: { date },
-    datePosted: { datePosted },
-    status: { status },
-    timeSent: { time },
-    name: { name },
-    url: { url },
+  let newLead:Leads = {
+    leadGen: "{ leadgen }",
+    date: "{ date }",
+    datePosted: "{ datePosted }",
+    status: "{ status }",
+    timeSent: "{ time }",
+    name: "{ name }",
+    url: "{ url }",
     role: ""
     // role: {role},
   };
 
+  const write = () => {
+      db.create(newLead);
+  };
+
   useEffect(() => {
     newLead = {
-      leadGen: { leadgen },
-      date: { date },
-      datePosted: { datePosted },
-      status: { status },
-      timeSent: { time },
-      name: { name },
-      url: { url },
-      role: ""
-  
-      // role: {role},
-      
+      leadGen: leadgen,
+      date:  date ,
+      datePosted:  datePosted ,
+      status:  status ,
+      timeSent:  time ,
+      name:  name ,
+      url:  url ,
+      role: ""      
     };
 
     console.log(newLead);
@@ -402,7 +405,7 @@ function CreateLeadPage() {
                       } else {
                         setGlobalError(false);
                         setSuccess(true);
-                        writeData(newLead)
+                        write()
                       }
                     }}
                   >
