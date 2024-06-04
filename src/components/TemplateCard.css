@@ -1,0 +1,37 @@
+.tmpCard{
+    width: 30vp;
+    height: 25vh;
+    /* overflow: hidden;
+    text-overflow: ellipsis; */
+    background-color: #FFFFFF;
+    margin: 12px 12px 6px 12px;
+    padding: 6px 12px 6px 12px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.overflowText {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 60px;
+
+    
+}
+
+.box{
+    height: 1rem;
+    width: 1rem;
+    background-color: gray;
+    
+}
+
+.cardTop{
+    width: 22rem;
+    display: flex;
+    justify-content: space-between;
+    
+    
+}

@@ -49,31 +49,32 @@ function CreateLeadPage() {
 
   const db = new LeadsDatabase()
 
-  let newLead = {
-    leadGen: { leadgen },
-    date: { date },
-    datePosted: { datePosted },
-    status: { status },
-    timeSent: { time },
-    name: { name },
-    url: { url },
+  let newLead:Leads = {
+    leadGen: "{ leadgen }",
+    date: "{ date }",
+    datePosted: "{ datePosted }",
+    status: "{ status }",
+    timeSent: "{ time }",
+    name: "{ name }",
+    url: "{ url }",
     role: ""
     // role: {role},
   };
 
+  const write = () => {
+      db.create(newLead);
+  };
+
   useEffect(() => {
     newLead = {
-      leadGen: { leadgen },
-      date: { date },
-      datePosted: { datePosted },
-      status: { status },
-      timeSent: { time },
-      name: { name },
-      url: { url },
-      role: ""
-  
-      // role: {role},
-      
+      leadGen: leadgen,
+      date:  date ,
+      datePosted:  datePosted ,
+      status:  status ,
+      timeSent:  time ,
+      name:  name ,
+      url:  url ,
+      role: ""      
     };
 
     console.log(newLead);
