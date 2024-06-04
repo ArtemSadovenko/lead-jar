@@ -1,6 +1,6 @@
 import { Role } from '../backend/Role';
 import User from '../backend/User';
-import { AuthenticatedUserDatabase, UsersDatabase } from '../backend/Database';
+import { AuthenticatedUserDatabase, UsersDatabase } from '../backend/database';
 
 export default class Login {
   private userDb: UsersDatabase;

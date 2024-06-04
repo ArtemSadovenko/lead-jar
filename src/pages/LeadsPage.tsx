@@ -14,7 +14,7 @@ import {
   Box,
 } from "@mui/material";
 import SearchIcon from "../statis/icons/SearchIcon";
-import { AuthenticatedUserDatabase, UsersDatabase, LeadsDatabase } from "../backend/Database";
+import { AuthenticatedUserDatabase, UsersDatabase, LeadsDatabase } from "../backend/database";
 import Login from "../domain/Login";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";

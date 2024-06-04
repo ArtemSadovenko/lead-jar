@@ -17,11 +17,11 @@ import CreateLeadPage from "./pages/CreateLeadPage";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/dashboard",
     element: <Home />,
   },
   {
-    path: "/dashboard",
+    path: "/",
     element: <Dashboard />,
   },
   {
