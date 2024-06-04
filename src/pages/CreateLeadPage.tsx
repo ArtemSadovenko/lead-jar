@@ -21,9 +21,7 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import {LeadsDatabase} from "../backend/Database";
-import Leads from "../backend/Leads";
-
+import LeadsDatabase from "../backend/Database";
 
 
 function CreateLeadPage() {
@@ -48,37 +46,6 @@ function CreateLeadPage() {
   const [urlError, setUrlError] = useState(false);
 
   const db = new LeadsDatabase()
-
-  let newLead:Leads = {
-    leadGen: "{ leadgen }",
-    date: "{ date }",
-    datePosted: "{ datePosted }",
-    status: "{ status }",
-    timeSent: "{ time }",
-    name: "{ name }",
-    url: "{ url }",
-    role: ""
-    // role: {role},
-  };
-
-  const write = () => {
-      db.create(newLead);
-  };
-
-  useEffect(() => {
-    newLead = {
-      leadGen: leadgen,
-      date:  date ,
-      datePosted:  datePosted ,
-      status:  status ,
-      timeSent:  time ,
-      name:  name ,
-      url:  url ,
-      role: ""      
-    };
-
-    console.log(newLead);
-  }, [newLead]);
 
   const check = () => {
     return (
