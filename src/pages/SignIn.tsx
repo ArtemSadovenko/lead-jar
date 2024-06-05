@@ -5,15 +5,28 @@ import { Link, useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import Login from "../domain/Login";
 import { useEffect, useState } from "react";
-import {UsersDatabase, AuthenticatedUserDatabase} from "../backend/database";
-import {Role} from "../backend/Role"
+import { UsersDatabase, AuthenticatedUserDatabase } from "../backend/database";
+import { Role } from "../backend/Role";
 import useRunOnce from "../hooks/userRunOnce";
+import { useAuth } from "../network/AuthProvider";
+import Network from "../network/network";
+import {
+  RegisterRequest,
+  AuthenticationRequest,
+} from "../network/AuthInterfaces";
 
 function SingIn() {
   const nav = useNavigate();
+  const network = new Network();
 
-  const users = new UsersDatabase()
-  const loginSystem = new Login(new UsersDatabase(), new AuthenticatedUserDatabase())
+  const { setToken } = useAuth();
+  const navigate = useNavigate();
+
+  const users = new UsersDatabase();
+  const loginSystem = new Login(
+    new UsersDatabase(),
+    new AuthenticatedUserDatabase()
+  );
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,22 +35,23 @@ function SingIn() {
     nav("/dashboard");
   };
 
-  // useRunOnce({
-  //   fn: () => {
-  //     users.create({
-  //       email:"ivan.vachilia@gmail.com",
-  //       password:"asdf;lkj",
-  //       role:Role.Admin
-  //     })
-  //   }
-  // }, []);
+  const request: AuthenticationRequest = {
+    email,
+    password,
+  };
 
-  const handleLogin = () => {
-    const result = loginSystem.login(email, password);
-    if (typeof result === "string") {
-      setError(result);
-    } else {
-      routeToDash();
+  const handleLogin = async () => {
+    try {
+      const response = await network.login(request);
+      if (typeof response.access_token === "string") {
+        navigate("/", { replace: true });
+        routeToDash();
+        setToken(response.access_token);
+      }
+      console.log("Login Response:", response);
+    } catch (error) {
+      setError("Wrong Email or Password");
+      console.error("Login Error:", error);
     }
   };
 
@@ -69,7 +83,7 @@ function SingIn() {
           placeholder="Enter Password"
           type="password"
         />
-                {error && (
+        {error && (
           <Alert sx={{ marginTop: "20px", width: "200px" }} severity="error">
             {error}
           </Alert>
