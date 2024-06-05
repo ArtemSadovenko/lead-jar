@@ -45,11 +45,6 @@ function LeadsPage() {
     new AuthenticatedUserDatabase()
   );
 
-  const { setToken } = useAuth();
-  const navigate = useNavigate();
-  setToken(null);
-  navigate("/", { replace: true });
-
   useRunOnce(
     {
       fn: () => {
