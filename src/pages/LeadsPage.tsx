@@ -14,7 +14,11 @@ import {
   Box,
 } from "@mui/material";
 import SearchIcon from "../statis/icons/SearchIcon";
-import { AuthenticatedUserDatabase, UsersDatabase, LeadsDatabase } from "../backend/database";
+import {
+  AuthenticatedUserDatabase,
+  UsersDatabase,
+  LeadsDatabase,
+} from "../backend/database";
 import Login from "../domain/Login";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -23,30 +27,43 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { fetchData , writeData } from "../hooks/useData";
+import { fetchData, writeData } from "../hooks/useData";
 import Skeleton from "@mui/material/Skeleton";
 import useRunOnce from "../hooks/useRunOnce";
 import Leads from "../backend/Leads";
-
+import { useAuth } from "../network/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 function LeadsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [list, setList] = useState<Leads[]>([]);
   const [userName, setUserName] = useState<string>("");
-  
-  const db = new LeadsDatabase()
-  const loginSystem = new Login(new UsersDatabase(), new AuthenticatedUserDatabase())
 
-  useRunOnce({
-    fn: () => {
-      const user = loginSystem.isAuthenticated()
-      if(user === null) {} else {
-        setUserName(user.email)
-      }
-      const a = db.read()
-      setList(a)
-    }
-  }, []);
+  const db = new LeadsDatabase();
+  const loginSystem = new Login(
+    new UsersDatabase(),
+    new AuthenticatedUserDatabase()
+  );
+
+  const { setToken } = useAuth();
+  const navigate = useNavigate();
+  setToken(null);
+  navigate("/", { replace: true });
+
+  useRunOnce(
+    {
+      fn: () => {
+        const user = loginSystem.isAuthenticated();
+        if (user === null) {
+        } else {
+          setUserName(user.email);
+        }
+        const a = db.read();
+        setList(a);
+      },
+    },
+    []
+  );
 
   return (
     <Container maxWidth="lg" style={{ padding: 0 }}>
@@ -151,7 +168,7 @@ function LeadsPage() {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {list && list.length > 0 
+                      {list && list.length > 0
                         ? list.map((row) => (
                             // row.role == 'Sales maneger'?(
                             <TableRow
@@ -197,7 +214,6 @@ function LeadsPage() {
                               </TableCell>
                               <TableCell align="left">{row.name}</TableCell>
                               <TableCell align="left">{row.url}</TableCell>
-                              
                             </TableRow>
                             // ):null
                           ))
