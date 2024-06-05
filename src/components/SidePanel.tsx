@@ -7,6 +7,7 @@ import BlogIcon from '../statis/icons/BlogIcon'
 import TemplateIcon from '../statis/icons/TemplateIcon'
 import TeamIcon from '../statis/icons/TeamIcon'
 import './SidePanel.css';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 function SidePanel() {
   return (
@@ -40,11 +41,20 @@ function SidePanel() {
             <div>Templates</div>
           </Link>
         </li>
-        <li>
+        <li style={{marginBottom: "25vh"}}>
           <Link to={"/dashboard/team"} className='no-hoover-link'>
             <TeamIcon scale = {24}/>
             <div>Team</div>
           </Link>
+        </li>
+
+        <li>
+
+          <Link  to={"/login"} className='no-hoover-link' >
+            <LogoutOutlinedIcon sx={{color: "white", verticalAlign:"middle"}}/>
+            <div>Log Out</div>
+          </Link>
+          
         </li>
       </ul>
     </Container>
