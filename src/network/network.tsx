@@ -51,6 +51,17 @@ export default class Network {
     }
   }
 
+  public async logout(): Promise<void> {
+    try {
+      await instance.post(`${BASE_URL}/api/v1/auth/logout`, null, {
+        withCredentials: true, // Send cookies with the request
+      });
+    } catch (error) {
+      throw new Error("Failed to logout");
+    }
+  }
+
+
   public async refreshToken(): Promise<void> {
     try {
       await instance.post(`${BASE_URL}/api/v1/auth/refresh-token`, null, {

@@ -16,7 +16,6 @@ import {
 } from "../network/AuthInterfaces";
 
 function SingIn() {
-  const nav = useNavigate();
   const network = new Network();
 
   const { setToken } = useAuth();
@@ -32,7 +31,7 @@ function SingIn() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const routeToDash = () => {
-    nav("/dashboard");
+    navigate("/dashboard");
   };
 
   const request: AuthenticationRequest = {
