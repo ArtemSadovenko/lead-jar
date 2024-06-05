@@ -6,18 +6,18 @@ import TopBar from "../components/TopBar";
 import TemplateCard from "../components/TemplateCard";
 import { text } from "stream/consumers";
 import PlusIcon from "../statis/icons/PlusIcon";
-import "./TemplatePage.css"
-import Dialog from '@mui/material/Dialog'
-import DialogTitle from '@mui/material/DialogTitle'
-import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
-import DialogActions from '@mui/material/DialogActions'
-import Button from '@mui/material/Button'
+import "./TemplatePage.css";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
 import { InputBase } from "@mui/material";
 let content = [
   {
     id: "1",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur, assumenda repudiandae architecto, voluptate placeat non quos tempora minus ut mollitia accusantium praesentium cupiditate molestias corporis nostrum vitae cum ea sequi. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur, assumenda repudiandae architecto, voluptate placeat non quos tempora minus ut mollitia accusantium praesentium cupiditate molestias corporis nostrum vitae cum ea sequi.",
+    text: "text",
   },
   {
     id: "2",
@@ -42,37 +42,90 @@ let content = [
 ];
 
 function TemplatesPage() {
-  const [isDialogOpened, SetIsDialogOpened] = useState(false)
-
-
+  const [isDialogOpened, SetIsDialogOpened] = useState(true);
+  const [dialogContent, SetContent] = useState("");
+  const [isDialogEditing, SetIsDialogEditing] = useState(false)
+  
 
   return (
     <div>
-      <Grid container spacing={3} sx={{ padding: 0 }} zeroMinWidth>
+      <Grid container spacing={3} sx={{ minWidth: "70vw" }} zeroMinWidth>
         <SidePanel />
-        
-        
-        <Dialog open={isDialogOpened} sx={{ width: "50vw", height:"40vh"}} >
-          <DialogTitle id={"2"}>
-            Home
-          </DialogTitle>
-          <DialogContent >
+
+        <Dialog
+          open={isDialogOpened}
+          onClose={() => {
+            if (dialogContent) {
+              let id = (
+                parseInt(content[content.length - 1].id) + 1
+              ).toString();
+              content.push({ id: id, text: dialogContent });
+            }
+            SetIsDialogEditing(false)
+            SetContent("")
+          }}
+        >
+          <DialogTitle id={"2"}>Home</DialogTitle>
+          <DialogContent>
             <DialogContentText>
-              <textarea></textarea>
+              <textarea
+                style={{
+                  resize: "none",
+                  border: "solid 1px",
+                  width: "40vw",
+                  height: "40vh",
+                  borderRadius: "10px",
+                }}
+                onChange={(event) => {
+                  SetContent(event.target.value);
+                }}
+                value={dialogContent}
+              ></textarea>
             </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button
               color="primary"
-              onClick={() =>{
-                SetIsDialogOpened(false)
+              onClick={() => {
+                if(dialogContent){
+                  let id = (parseInt(content[content.length - 1].id) + 1).toString()
+                  content.push({ id: id, text: dialogContent });                  
+
+                }
+
+                SetIsDialogOpened(false);
               }}
             >
-              Cancel
+              Close
             </Button>
+            {/* <Button
+              onClick={() => {
+                if (dialogContent) {
+                  let id: string
+                  if(hardCodeId.length>1){
+                    id = hardCodeId
+                  }
+                  else{
+                    id = (parseInt(content[content.length - 1].id) + 1).toString()
+                    SetHardCodeId(id) 
+                  }
+
+
+
+
+                  // let id = (hardCodeId.length>1?hardCodeId: 
+                  // (
+                  //   parseInt(content[content.length - 1].id) + 1
+                  // ).toString()) ;
+                  // id = hardCodeId
+                  content.push({ id: id, text: dialogContent });
+                }
+              }}
+            >
+              save
+            </Button> */}
           </DialogActions>
         </Dialog>
-
 
         <Grid item md={9}>
           <TopBar />
@@ -91,21 +144,26 @@ function TemplatesPage() {
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
-                    alignItems: "center"
+                    alignItems: "center",
                   }}
-                  onClick={() => {console.log("d")}}
+                  onClick={() => {
+                    SetIsDialogOpened(true);
+                    SetIsDialogEditing(true)
+                  }}
                 >
                   <div
                     style={{
                       display: "flex",
                       flexDirection: "row",
-                       justifyContent: "center", alignContent: "center", alignItems: "center" 
+                      justifyContent: "center",
+                      alignContent: "center",
+                      alignItems: "center",
                     }}
                   >
                     {/* <div style={{ display: "flex", justifyContent: "center", alignContent: "center", alignItems: "center" }}> */}
-                      <PlusIcon scale={30} />
+                    <PlusIcon scale={30} />
                     {/* </div> */}
-                    <h3 style={{color: "#757C89"}}>New Teamplate</h3>
+                    <h3 style={{ color: "#757C89" }}>New Teamplate</h3>
                   </div>
                 </div>
               </Grid>

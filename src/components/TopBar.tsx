@@ -32,7 +32,7 @@ function TopBar() {
       <div className="search">
         <SearchPanel />
       </div>
-      <div style={{ paddingLeft: "15vw" }}>
+      <div style={{ paddingLeft: "12vw" }}>
         <Button
           variant="contained"
           color="primary"
@@ -44,7 +44,7 @@ function TopBar() {
         </Button>
 
         <Button
-          sx={{ margin: "3px 20px 3px 20px" }}
+          sx={{ margin: "3px 20px 0px 20px"}}
           variant="outlined"
           startIcon={<AccountCircleIcon />}
         >
