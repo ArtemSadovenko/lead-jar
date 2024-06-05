@@ -16,8 +16,6 @@ import CreateLeadPage from "../pages/CreateLeadPage";
 const Routes = () => {
   const {token} = useAuth();
 
-  console.log("what is token " + token)
-
   // Define public routes accessible to all users
   const routesForPublic = [
     {
