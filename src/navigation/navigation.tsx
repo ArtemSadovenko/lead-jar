@@ -16,6 +16,8 @@ import CreateLeadPage from "../pages/CreateLeadPage";
 const Routes = () => {
   const {token} = useAuth();
 
+  const isDev = process.env.REACT_APP_DEV;
+
   // Define public routes accessible to all users
   const routesForPublic = [
     {
@@ -25,7 +27,16 @@ const Routes = () => {
   ];
 
   // Define routes accessible only to authenticated users
-  const routesForAuthenticatedOnly = [
+  const routesForAuthenticatedOnly = (isDev?
+    
+
+    [
+      
+    ]
+
+
+    :
+    [
     {
       path: "/",
       element: <ProtectedRoute />, // Wrap the component in ProtectedRoute
@@ -62,12 +73,48 @@ const Routes = () => {
         path: "/dashboard/leads/create",
         element: <CreateLeadPage/>
       }
-      ],
+      ]
     },
-  ];
+  ])
 
   // Define routes accessible only to non-authenticated users
-  const routesForNotAuthenticatedOnly = [
+  const routesForNotAuthenticatedOnly = (isDev? 
+    [ 
+      {
+      path: "/dashboard",
+      element: <Home />,
+    },
+    {
+      path: "/",
+      element: <Dashboard />,
+    },
+    {
+      path: "/dashboard/ai-assistant",
+      element: <AssistantPage />,
+    },
+    {
+      path: "/dashboard/leads",
+      element: <LeadsPage />,
+    },
+    {
+      path: "/dashboard/blog",
+      element: <BlogPage />,
+    },
+    {
+      path: "/dashboard/templates",
+      element: <TemplatesPage />,
+    },
+    {
+      path: "/dashboard/team",
+      element: <TeamPage />,
+    },
+    {
+      path: "/dashboard/leads/create",
+      element: <CreateLeadPage/>
+    }
+    ]
+    :
+    [
     {
         path: "/login",
         element: <SingIn />,
@@ -76,7 +123,7 @@ const Routes = () => {
         path:"/login/sign-up",
         element: <SignUp/>
       },
-  ];
+  ])
 
   // Combine and conditionally include routes based on authentication status
   const router = createBrowserRouter([
