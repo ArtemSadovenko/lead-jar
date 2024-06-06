@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosDefault from "../network/axios";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 interface AuthContextType {
@@ -12,6 +12,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   // State to hold the authentication token
+
   const [token, setToken_] = useState<string | null>(
     localStorage.getItem("token")
   );
@@ -23,10 +24,12 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     if (token) {
-      axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+      console.log("token is:");
+      console.log(token);
+      axiosDefault.defaults.headers.common["Authorization"] = "Bearer " + token;
       localStorage.setItem("token", token);
     } else {
-      delete axios.defaults.headers.common["Authorization"];
+      delete axiosDefault.defaults.headers.common["Authorization"];
       localStorage.removeItem("token");
     }
   }, [token]);

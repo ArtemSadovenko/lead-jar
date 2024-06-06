@@ -14,12 +14,6 @@ import {
   Box,
 } from "@mui/material";
 import SearchIcon from "../statis/icons/SearchIcon";
-import {
-  AuthenticatedUserDatabase,
-  UsersDatabase,
-  LeadsDatabase,
-} from "../backend/database";
-import Login from "../domain/Login";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -30,40 +24,38 @@ import Paper from "@mui/material/Paper";
 import { fetchData, writeData } from "../hooks/useData";
 import Skeleton from "@mui/material/Skeleton";
 import useRunOnce from "../hooks/useRunOnce";
-import Leads from "../backend/Leads";
 import { useAuth } from "../network/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import Network from "../network/network";
+import { LeadRequest, LeadResponse } from "../network/Leads";
 
 function LeadsPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const [list, setList] = useState<Leads[]>([]);
+  const [newList, setNewList] = useState<LeadResponse[]>([]);
+  const { token } = useAuth(); // Get the authentication token from context
+
   const [userName, setUserName] = useState<string>("");
 
   const network = new Network();
-  const db = new LeadsDatabase();
-  const loginSystem = new Login(
-    new UsersDatabase(),
-    new AuthenticatedUserDatabase()
-  );
 
-  useRunOnce(
-    {
-      fn: () => {
-        const leads = network.getAllLeads();
-        console.log("leads are: ");
-        console.log(leads);
-        const user = loginSystem.isAuthenticated();
-        if (user === null) {
-        } else {
-          setUserName(user.email);
-        }
-        const a = db.read();
-        setList(a);
-      },
-    },
-    []
-  );
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const network = new Network();
+        const leads = await network.getAllLeads();
+        setNewList(leads);
+      } catch (error) {
+        console.error("Error fetching leads:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (token) {
+      fetchData();
+    }
+  }, [token]); // Trigger the effect when the token changes
 
   return (
     <Container maxWidth="lg" style={{ padding: 0 }}>
@@ -168,8 +160,8 @@ function LeadsPage() {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {list && list.length > 0
-                        ? list.map((row) => (
+                      {newList && newList.length > 0
+                        ? newList.map((row) => (
                             // row.role == 'Sales maneger'?(
                             <TableRow
                               key={row.name}
@@ -209,7 +201,7 @@ function LeadsPage() {
                                     padding: "5px 0px 5px 5px",
                                   }}
                                 >
-                                  {row.time}
+                                  {row.date}
                                 </p>
                               </TableCell>
                               <TableCell align="left">{row.name}</TableCell>

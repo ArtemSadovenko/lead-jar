@@ -1,25 +1,18 @@
-import axios from "axios";
 import {
   RegisterRequest,
   AuthenticationResponse,
   AuthenticationRequest,
 } from "./AuthInterfaces";
 import { LeadRequest, LeadResponse } from "./Leads";
-
-const BASE_URL = "http://192.168.3.9:8080";
-
-const instance = axios.create({
-  baseURL: "http://192.168.3.9:8080",
-  withCredentials: true, // Send cookies with cross-origin requests
-});
+import axiosDefault from "../network/axios";
 
 export default class Network {
   public async register(
     request: RegisterRequest
   ): Promise<AuthenticationResponse> {
     try {
-      const response = await instance.post(
-        `${BASE_URL}/api/v1/auth/register`,
+      const response = await axiosDefault.post(
+        `${axiosDefault.defaults.baseURL}/api/v1/auth/register`,
         request,
         {
           headers: {
@@ -29,7 +22,7 @@ export default class Network {
       );
       return response.data;
     } catch (error) {
-      throw new Error("Failed to register");
+      return {} as AuthenticationResponse; // Return empty data
     }
   }
 
@@ -37,8 +30,8 @@ export default class Network {
     request: AuthenticationRequest
   ): Promise<AuthenticationResponse> {
     try {
-      const response = await instance.post(
-        `${BASE_URL}/api/v1/auth/authenticate`,
+      const response = await axiosDefault.post(
+        `${axiosDefault.defaults.baseURL}/api/v1/auth/authenticate`,
         request,
         {
           headers: {
@@ -48,34 +41,42 @@ export default class Network {
       );
       return response.data;
     } catch (error) {
-      throw new Error("Failed to login");
+      return {} as AuthenticationResponse; // Return empty data
     }
   }
 
   public async logout(): Promise<void> {
     try {
-      await instance.post(`${BASE_URL}/api/v1/auth/logout`, null, {
-        withCredentials: true, // Send cookies with the request
-      });
+      await axiosDefault.post(
+        `${axiosDefault.defaults.baseURL}/api/v1/auth/logout`,
+        null,
+        {
+          withCredentials: true, // Send cookies with the request
+        }
+      );
     } catch (error) {
-      throw new Error("Failed to logout");
+      return; // Return empty data
     }
   }
 
   public async refreshToken(): Promise<void> {
     try {
-      await instance.post(`${BASE_URL}/api/v1/auth/refresh-token`, null, {
-        withCredentials: true, // Send cookies with the request
-      });
+      await axiosDefault.post(
+        `${axiosDefault.defaults.baseURL}/api/v1/auth/refresh-token`,
+        null,
+        {
+          withCredentials: true, // Send cookies with the request
+        }
+      );
     } catch (error) {
-      throw new Error("Failed to refresh token");
+      return; // Return empty data
     }
   }
 
   public async createLead(leadRequest: LeadRequest): Promise<LeadResponse> {
     try {
-      const response = await instance.post(
-        `${BASE_URL}/api/v1/leads/create`,
+      const response = await axiosDefault.post(
+        `${axiosDefault.defaults.baseURL}/api/v1/leads/create`,
         leadRequest,
         {
           headers: {
@@ -85,33 +86,51 @@ export default class Network {
       );
       return response.data;
     } catch (error) {
-      throw new Error("Failed to create lead");
+      return {} as LeadResponse; // Return empty data
     }
   }
 
   public async deleteLead(leadId: number): Promise<void> {
     try {
-      await instance.delete(`${BASE_URL}/api/v1/leads/${leadId}`);
+      await axiosDefault.delete(
+        `${axiosDefault.defaults.baseURL}/api/v1/leads/${leadId}`
+      );
     } catch (error) {
-      throw new Error("Failed to delete lead");
+      return; // Return empty data
     }
   }
 
   public async getAllLeads(): Promise<LeadResponse[]> {
     try {
-      const response = await instance.get(`${BASE_URL}/api/v1/leads/all`);
+      const currentToken =
+        axiosDefault.defaults.headers.common["Authorization"];
+
+      // Check if a Bearer token is set
+      if (currentToken) {
+        // Bearer token is set
+        console.log("Current Bearer token:", currentToken);
+      } else {
+        // Bearer token is not set
+        console.log("No Bearer token is set.");
+      }
+
+      const response = await axiosDefault.get(
+        `${axiosDefault.defaults.baseURL}/api/v1/leads/all`
+      );
       return response.data;
     } catch (error) {
-      throw new Error("Failed to get all leads");
+      return []; // Return empty data
     }
   }
 
   public async getLeadById(leadId: number): Promise<LeadResponse> {
     try {
-      const response = await instance.get(`${BASE_URL}/api/v1/leads/${leadId}`);
+      const response = await axiosDefault.get(
+        `${axiosDefault.defaults.baseURL}/api/v1/leads/${leadId}`
+      );
       return response.data;
     } catch (error) {
-      throw new Error("Failed to get lead by id");
+      return {} as LeadResponse; // Return empty data
     }
   }
 }

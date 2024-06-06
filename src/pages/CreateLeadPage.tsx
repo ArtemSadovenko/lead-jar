@@ -21,7 +21,6 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { LeadsDatabase } from "../backend/database";
 
 function CreateLeadPage() {
   const [globalError, setGlobalError] = useState(false);
@@ -44,7 +43,6 @@ function CreateLeadPage() {
   const [hireError, setHireError] = useState(false);
   const [urlError, setUrlError] = useState(false);
 
-  const db = new LeadsDatabase()
 
   const check = () => {
     return (
@@ -405,17 +403,7 @@ function CreateLeadPage() {
 
                       } else {
                         setGlobalError(false);
-                        setSuccess(true);
-                        db.create({
-                          leadgen : leadgen,
-                          date : date,
-                          datePosted : datePosted,
-                          status : status,
-                          time : time,
-                          name : name,
-                          url : url,
-                          hire : rate,
-                        })
+                        setSuccess(true);     
                       }
                     }}
                   >

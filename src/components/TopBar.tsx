@@ -6,18 +6,12 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
 import AddIcon from '@mui/icons-material/Add';
 import useRunOnce from "../hooks/userRunOnce";
-import { AuthenticatedUserDatabase, UsersDatabase } from "../backend/database";
-import Login from "../domain/Login";
 
 function TopBar() {
   const [userName, setUserName] = useState<string>("");
-  const loginSystem = new Login(new UsersDatabase(), new AuthenticatedUserDatabase())
   useRunOnce({
     fn: () => {
-      const user = loginSystem.isAuthenticated()
-      if(user === null) {} else {
-        setUserName(user.email)
-      }
+
     }
   }, []);
 

@@ -1,13 +1,3 @@
-import { useNavigate } from "react-router-dom";
-import {
-  AuthenticatedUserDatabase,
-  UsersDatabase,
-  LeadsDatabase,
-} from "../backend/database";
-import Login from "../domain/Login";
-
-import useRunOnce from "../hooks/userRunOnce";
-import React from "react";
 import "./Home.css";
 import AiAssistantIcon from "../statis/icons/AiAssistantIcon";
 import BlogIcon from "../statis/icons/BlogIcon";
