@@ -33,12 +33,14 @@ import useRunOnce from "../hooks/useRunOnce";
 import Leads from "../backend/Leads";
 import { useAuth } from "../network/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import Network from "../network/network";
 
 function LeadsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [list, setList] = useState<Leads[]>([]);
   const [userName, setUserName] = useState<string>("");
 
+  const network = new Network();
   const db = new LeadsDatabase();
   const loginSystem = new Login(
     new UsersDatabase(),
@@ -48,6 +50,9 @@ function LeadsPage() {
   useRunOnce(
     {
       fn: () => {
+        const leads = network.getAllLeads();
+        console.log("leads are: ");
+        console.log(leads);
         const user = loginSystem.isAuthenticated();
         if (user === null) {
         } else {
