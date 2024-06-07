@@ -30,6 +30,7 @@ import Network from "../network/network";
 import {
   LeadRequest,
   LeadResponse,
+  LeadStatus,
   LeadStatusBackgroundColors,
   LeadStatusTextColors,
   LeadStatusUINames,
@@ -41,7 +42,7 @@ function LeadsPage() {
   const [leads, setLeads] = useState<LeadResponse[]>([]);
   const [tableLeads, setTableLeadsLeads] = useState<LeadResponse[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [showTable, SetShowTable ] = useState(true)
+  const [showTable, SetShowTable] = useState(true);
   // const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
   //   setSearchQuery(event.target.value);
   // };
@@ -65,7 +66,7 @@ function LeadsPage() {
     if (token) {
       fetchData();
     }
-  }, [token]); 
+  }, [token]);
 
   return (
     <Container maxWidth="lg" style={{ padding: 0 }}>
@@ -111,8 +112,7 @@ function LeadsPage() {
                   value={searchQuery}
                   onChange={(event) => {
                     setSearchQuery(event.target.value);
-                    SetShowTable(false)
-
+                    SetShowTable(false);
                   }}
                 />
 
@@ -121,25 +121,29 @@ function LeadsPage() {
                   sx={{ p: "6px" }}
                   aria-label="search"
                   onClick={() => {
-                    SetShowTable(false)
+                    SetShowTable(false);
                     let filteredLeads: LeadResponse[] = [];
-                    if(searchQuery.length === 0){
-                      setLeads(tableLeads)
-                    }else
-                     {
+                    if (searchQuery.length === 0) {
+                      setLeads(tableLeads);
+                    } else {
                       for (const lead of leads) {
-                        let name = lead.name;
-                        if (name.includes(searchQuery)) {
-                          filteredLeads.push(lead)
-                        
-                        
+                        if (
+                          lead.name.includes(searchQuery) ||
+                          lead.creator?.firstname.includes(searchQuery) ||
+                          lead.creator?.lastname.includes(searchQuery) ||
+                          lead.creator?.role.includes(searchQuery) ||
+                          lead.url.includes(searchQuery) ||
+                          lead.datePosted.includes(searchQuery) ||
+                          lead.status == 
+                        ) {
+                          filteredLeads.push(lead);
                         }
                       }
                       setLeads(filteredLeads);
                     }
                     setSearchQuery("");
 
-                    SetShowTable(true)
+                    SetShowTable(true);
                   }}
                 >
                   <SearchIcon />
@@ -202,84 +206,82 @@ function LeadsPage() {
                         <TableCell align="left">TOTAL SPEND</TableCell>
                       </TableRow>
                     </TableHead>
-                    {showTable?(
-                    <TableBody>
-                      {leads && leads.length > 0
-                        ? leads.map((lead) => (
-                            <TableRow
-                              key={lead.name}
-                              sx={{
-                                "&:last-child td, &:last-child th": {
-                                  border: 0,
-                                },
-                              }}
-                            >
-                              <TableCell component="th" scope="row">
-                                {lead.creator?.firstname +
-                                  " " +
-                                  lead.creator?.lastname}
-                              </TableCell>
-                              <TableCell component="th" scope="row">
-                                {lead.creator?.role}
-                              </TableCell>
-                              <TableCell align="left">{lead.date}</TableCell>
-                              <TableCell align="left">
-                                {lead.datePosted}
-                              </TableCell>
-                              <TableCell align="left">
-                                {" "}
-                                <p
-                                  style={{
-                                    backgroundColor:
-                                      LeadStatusBackgroundColors[lead.status],
-                                    color: LeadStatusTextColors[lead.status],
-                                    borderRadius: "10px",
-                                    padding: "5px 5px 5px 5px",
-                                    textAlign: "center",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    fontWeight: "bold",
-                                  }}
-                                >
+                    {showTable ? (
+                      <TableBody>
+                        {leads && leads.length > 0
+                          ? leads.map((lead) => (
+                              <TableRow
+                                key={lead.name}
+                                sx={{
+                                  "&:last-child td, &:last-child th": {
+                                    border: 0,
+                                  },
+                                }}
+                              >
+                                <TableCell component="th" scope="row">
+                                  {lead.creator?.firstname +
+                                    " " +
+                                    lead.creator?.lastname}
+                                </TableCell>
+                                <TableCell component="th" scope="row">
+                                  {lead.creator?.role}
+                                </TableCell>
+                                <TableCell align="left">{lead.date}</TableCell>
+                                <TableCell align="left">
+                                  {lead.datePosted}
+                                </TableCell>
+                                <TableCell align="left">
                                   {" "}
-                                  {LeadStatusUINames[lead.status]}
-                                </p>
-                              </TableCell>
-                              <TableCell align="left">
-                                <p
-                                  style={{
-                                    backgroundColor:
-                                      ListTimesColors[lead.timeSent],
-                                    color: "#FFFFFF",
-                                    borderRadius: "10px",
-                                    padding: "5px 5px 5px 5px",
-                                    textAlign: "center",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  {lead.timeSent}
-                                </p>
-                              </TableCell>
-                              <TableCell align="left">{lead.name}</TableCell>
-                              <TableCell align="left">{lead.url}</TableCell>
-                              <TableCell align="left">
-                                {Math.floor(lead.hireRate) + "$"}
-                              </TableCell>
-                              <TableCell align="left">
-                                {Math.floor(lead.totalSpend) + "$"}
-                              </TableCell>
-                            </TableRow>
-                            // ):null
-                          ))
-                        : null}
-                    </TableBody>
-
-):null}
-
+                                  <p
+                                    style={{
+                                      backgroundColor:
+                                        LeadStatusBackgroundColors[lead.status],
+                                      color: LeadStatusTextColors[lead.status],
+                                      borderRadius: "10px",
+                                      padding: "5px 5px 5px 5px",
+                                      textAlign: "center",
+                                      display: "flex",
+                                      justifyContent: "center",
+                                      alignItems: "center",
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    {" "}
+                                    {LeadStatusUINames[lead.status]}
+                                  </p>
+                                </TableCell>
+                                <TableCell align="left">
+                                  <p
+                                    style={{
+                                      backgroundColor:
+                                        ListTimesColors[lead.timeSent],
+                                      color: "#FFFFFF",
+                                      borderRadius: "10px",
+                                      padding: "5px 5px 5px 5px",
+                                      textAlign: "center",
+                                      display: "flex",
+                                      justifyContent: "center",
+                                      alignItems: "center",
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    {lead.timeSent}
+                                  </p>
+                                </TableCell>
+                                <TableCell align="left">{lead.name}</TableCell>
+                                <TableCell align="left">{lead.url}</TableCell>
+                                <TableCell align="left">
+                                  {Math.floor(lead.hireRate) + "$"}
+                                </TableCell>
+                                <TableCell align="left">
+                                  {Math.floor(lead.totalSpend) + "$"}
+                                </TableCell>
+                              </TableRow>
+                              // ):null
+                            ))
+                          : null}
+                      </TableBody>
+                    ) : null}
                   </Table>
                 </TableContainer>
               </div>
