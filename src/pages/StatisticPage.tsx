@@ -8,16 +8,16 @@ import { ContentCopy } from "@mui/icons-material";
 import { useAuth } from "../network/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import Network from "../network/network";
-import { LeadRequest, LeadResponse } from "../network/Leads";
+import { LeadRequest, LeadResponse, LeadStatusUINames } from "../network/Leads";
 import { Pie, Bar } from "react-chartjs-2";
 import "chart.js/auto";
 
 function StatisticPage() {
-    const navigator = useNavigate();
+  const navigator = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
   const [leads, setLeads] = useState<LeadResponse[]>([]);
-  
+
   const [userName, setUserName] = useState<string>("");
 
   const network = new Network();
@@ -43,22 +43,20 @@ function StatisticPage() {
     }
   }, [token]);
 
-  console.log(leads);
-
   const getStatusCounts = () => {
     const statusCounts: { [status: string]: number } = {};
     leads.forEach((lead) => {
-      if (lead.status in statusCounts) {
-        statusCounts[lead.status]++;
+      const status = LeadStatusUINames[lead.status];
+      if (status in statusCounts) {
+        statusCounts[status]++;
       } else {
-        statusCounts[lead.status] = 1;
+        statusCounts[status] = 1;
       }
     });
     return statusCounts;
   };
 
   const statusCounts = getStatusCounts();
-
   const pieChartData = {
     labels: Object.keys(statusCounts),
     datasets: [
@@ -102,26 +100,33 @@ function StatisticPage() {
 
         <Grid item md={9}>
           <TopBar />
-          <div style={{margin: "10px 20px 10px 20px "}}>
-            <Button sx={{
-              color: "black",
-              borderBottom: "solid black 1px",
-              margin: "8px 16px 8px 16px "
-            }} onClick={() =>{
-                navigator("/dashboard/ai-assistant")
-            }}>Ai Asistant</Button>
+          <div style={{ margin: "10px 20px 10px 20px " }}>
             <Button
-            sx={{
-              color: "black",
-              borderBottom: "solid black 1px",
-              margin: "8px 16px 8px 16px "
-            }}  onClick={() =>{
-                navigator("/dashboard/statistics")
-            }}>Statistics</Button>
-         </div>
+              sx={{
+                color: "black",
+                borderBottom: "solid black 1px",
+                margin: "8px 16px 8px 16px ",
+              }}
+              onClick={() => {
+                navigator("/dashboard/ai-assistant");
+              }}
+            >
+              Ai Asistant
+            </Button>
+            <Button
+              sx={{
+                color: "black",
+                borderBottom: "solid black 1px",
+                margin: "8px 16px 8px 16px ",
+              }}
+              onClick={() => {
+                navigator("/dashboard/statistics");
+              }}
+            >
+              Statistics
+            </Button>
+          </div>
           <Container sx={{ display: "flex" }}>
-
-
             <div
               style={{
                 width: "400px",
