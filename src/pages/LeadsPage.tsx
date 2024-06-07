@@ -39,10 +39,12 @@ import {
 function LeadsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [leads, setLeads] = useState<LeadResponse[]>([]);
+  const [tableLeads, setTableLeadsLeads] = useState<LeadResponse[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
-  };
+  const [showTable, SetShowTable ] = useState(true)
+  // const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+  //   setSearchQuery(event.target.value);
+  // };
 
   const { token } = useAuth(); // Get the authentication token from context
   useEffect(() => {
@@ -52,6 +54,7 @@ function LeadsPage() {
         const network = new Network();
         const leads_ = await network.getAllLeads();
         setLeads(leads_);
+        setTableLeadsLeads(leads_);
       } catch (error) {
         console.error("Error fetching leads:", error);
       } finally {
@@ -62,7 +65,7 @@ function LeadsPage() {
     if (token) {
       fetchData();
     }
-  }, [token]); // Trigger the effect when the token changes
+  }, [token]); 
 
   return (
     <Container maxWidth="lg" style={{ padding: 0 }}>
@@ -106,10 +109,39 @@ function LeadsPage() {
                   }}
                   inputProps={{ "aria-label": "search" }}
                   value={searchQuery}
-                  onChange={handleSearch}
+                  onChange={(event) => {
+                    setSearchQuery(event.target.value);
+                    SetShowTable(false)
+
+                  }}
                 />
 
-                <IconButton type="button" sx={{ p: "6px" }} aria-label="search">
+                <IconButton
+                  type="button"
+                  sx={{ p: "6px" }}
+                  aria-label="search"
+                  onClick={() => {
+                    SetShowTable(false)
+                    let filteredLeads: LeadResponse[] = [];
+                    if(searchQuery.length === 0){
+                      setLeads(tableLeads)
+                    }else
+                     {
+                      for (const lead of leads) {
+                        let name = lead.name;
+                        if (name.includes(searchQuery)) {
+                          filteredLeads.push(lead)
+                        
+                        
+                        }
+                      }
+                      setLeads(filteredLeads);
+                    }
+                    setSearchQuery("");
+
+                    SetShowTable(true)
+                  }}
+                >
                   <SearchIcon />
                 </IconButton>
 
@@ -170,6 +202,7 @@ function LeadsPage() {
                         <TableCell align="left">TOTAL SPEND</TableCell>
                       </TableRow>
                     </TableHead>
+                    {showTable?(
                     <TableBody>
                       {leads && leads.length > 0
                         ? leads.map((lead) => (
@@ -244,6 +277,9 @@ function LeadsPage() {
                           ))
                         : null}
                     </TableBody>
+
+):null}
+
                   </Table>
                 </TableContainer>
               </div>
