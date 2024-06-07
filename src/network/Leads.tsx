@@ -50,6 +50,18 @@ export const LeadStatusUINames: { [key in LeadStatus]: string } = {
   [LeadStatus.IN_PROGRESS]: "In Progress", // Example color for IN_PROGRESS
 };
 
+export enum Role {
+  LEAD_GENERATOR = "LEAD_GENERATOR",
+  ADMIN = "ADMIN",
+  SALES_MANAGER = "SALES_MANAGER",
+}
+
+export const RoleUINames: { [key in Role]: string } = {
+  [Role.LEAD_GENERATOR]: "Lead Generator", // Example color for PROPOSAL_SENT
+  [Role.ADMIN]: "Admin", // Example color for VIEWED
+  [Role.SALES_MANAGER]: "Sales Manager", // Example color for CHATTING
+};
+
 export interface LeadRequest {
   name: string;
   date: string;
@@ -59,6 +71,14 @@ export interface LeadRequest {
   hireRate: number;
   totalSpend: number;
   status: string;
+}
+
+export interface UserResponse {
+  id?: number; // Optional property
+  firstname: string;
+  lastname: string;
+  email: string;
+  role: Role;
 }
 
 export interface LeadResponse {
@@ -71,7 +91,7 @@ export interface LeadResponse {
   hireRate: number;
   totalSpend: number;
   status: LeadStatus;
-  userId?: number;
+  creator?: UserResponse;
   created: string; // Use string to represent LocalDateTime
   updated?: string; // Use string to represent LocalDateTime
 }

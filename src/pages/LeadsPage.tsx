@@ -27,7 +27,13 @@ import useRunOnce from "../hooks/useRunOnce";
 import { useAuth } from "../network/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import Network from "../network/network";
-import { LeadRequest, LeadResponse, LeadStatusBackgroundColors, LeadStatusTextColors, LeadStatusUINames } from "../network/Leads";
+import {
+  LeadRequest,
+  LeadResponse,
+  LeadStatusBackgroundColors,
+  LeadStatusTextColors,
+  LeadStatusUINames,
+} from "../network/Leads";
 
 function LeadsPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -168,7 +174,9 @@ function LeadsPage() {
                               }}
                             >
                               <TableCell component="th" scope="row">
-                                {lead.name}
+                                {lead.creator?.firstname +
+                                  " " +
+                                  lead.creator?.lastname}
                               </TableCell>
                               <TableCell align="left">{lead.date}</TableCell>
                               <TableCell align="left">
@@ -178,7 +186,8 @@ function LeadsPage() {
                                 {" "}
                                 <p
                                   style={{
-                                    backgroundColor: LeadStatusBackgroundColors[lead.status],
+                                    backgroundColor:
+                                      LeadStatusBackgroundColors[lead.status],
                                     color: LeadStatusTextColors[lead.status],
                                     borderRadius: "10px",
                                     padding: "5px 0px 5px 10px",
@@ -197,7 +206,7 @@ function LeadsPage() {
                                     padding: "5px 0px 5px 5px",
                                   }}
                                 >
-                                  {lead.date}
+                                  {lead.timeSent}
                                 </p>
                               </TableCell>
                               <TableCell align="left">{lead.name}</TableCell>
