@@ -8,7 +8,13 @@ import { ContentCopy } from "@mui/icons-material";
 import { useAuth } from "../network/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import Network from "../network/network";
-import { LeadRequest, LeadResponse, LeadStatusUINames } from "../network/Leads";
+import {
+  LeadResponse,
+  LeadStatus,
+  LeadStatusBackgroundColors,
+  LeadStatusUINames,
+  stringToLeadStatus as stringToLeadStatus,
+} from "../network/Leads";
 import { Pie, Bar } from "react-chartjs-2";
 import "chart.js/auto";
 
@@ -17,11 +23,6 @@ function StatisticPage() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [leads, setLeads] = useState<LeadResponse[]>([]);
-
-  const [userName, setUserName] = useState<string>("");
-
-  const network = new Network();
-
   const { token } = useAuth(); // Get the authentication token from context
 
   useEffect(() => {
@@ -45,8 +46,9 @@ function StatisticPage() {
 
   const getStatusCounts = () => {
     const statusCounts: { [status: string]: number } = {};
+
     leads.forEach((lead) => {
-      const status = LeadStatusUINames[lead.status];
+      const status = lead.status;
       if (status in statusCounts) {
         statusCounts[status]++;
       } else {
@@ -58,34 +60,53 @@ function StatisticPage() {
 
   const statusCounts = getStatusCounts();
   const pieChartData = {
-    labels: Object.keys(statusCounts),
+    labels: Object.keys(statusCounts).map(
+      (status) => LeadStatusUINames[stringToLeadStatus(status)]
+    ),
     datasets: [
       {
         data: Object.values(statusCounts),
         backgroundColor: [
-          "#FF6384",
-          "#36A2EB",
-          "#FFCE56",
-          "#FF6384",
-          "#36A2EB",
+          LeadStatusBackgroundColors[LeadStatus.PROPOSAL_SENT],
+          LeadStatusBackgroundColors[LeadStatus.VIEWED],
+          LeadStatusBackgroundColors[LeadStatus.CHATTING],
+          LeadStatusBackgroundColors[LeadStatus.IN_PROGRESS],
         ],
         hoverBackgroundColor: [
-          "#FF6384",
-          "#36A2EB",
-          "#FFCE56",
-          "#FF6384",
-          "#36A2EB",
+          LeadStatusBackgroundColors[LeadStatus.PROPOSAL_SENT],
+          LeadStatusBackgroundColors[LeadStatus.VIEWED],
+          LeadStatusBackgroundColors[LeadStatus.CHATTING],
+          LeadStatusBackgroundColors[LeadStatus.IN_PROGRESS],
         ],
       },
     ],
   };
 
+  const getStatusTotalSpend = () => {
+    const statusTotalSpend: { [status: string]: number } = {};
+
+    leads.forEach((lead) => {
+      const { status, totalSpend } = lead;
+      if (status in statusTotalSpend) {
+        statusTotalSpend[status] += totalSpend;
+      } else {
+        statusTotalSpend[status] = totalSpend;
+      }
+    });
+
+    return statusTotalSpend;
+  };
+
+  const statusTotalSpend = getStatusTotalSpend();
+
   const barChartData = {
-    labels: Object.keys(statusCounts),
+    labels: Object.keys(statusTotalSpend).map(
+      (status) => LeadStatusUINames[stringToLeadStatus(status)]
+    ),
     datasets: [
       {
-        label: "Status Counts",
-        data: Object.values(statusCounts),
+        label: "Earned money by Status",
+        data: Object.values(statusTotalSpend),
         backgroundColor: "rgba(75,192,192,0.4)",
         borderColor: "rgba(75,192,192,1)",
         borderWidth: 1,
@@ -130,11 +151,13 @@ function StatisticPage() {
             <div
               style={{
                 width: "400px",
-                height: "400px",
-                margin: "10px 10px 10px 10px ",
+                height: "300px",
+                display: "flex",
+                alignContent: "center",
+                flexDirection: "column",
               }}
             >
-              <h2>Status</h2>
+              <h2>Leads count by Status</h2>
               <Pie width={50} height={50} data={pieChartData} />
             </div>
 
@@ -143,13 +166,11 @@ function StatisticPage() {
                 width: "400px",
                 height: "300px",
                 display: "flex",
-                justifyContent: "center",
                 alignContent: "center",
                 flexDirection: "column",
-                margin: "10px 10px 10px 10px ",
               }}
             >
-              <h2>Status</h2>
+              <h2>Leads by total Spend</h2>
               <Bar data={barChartData} />
             </div>
           </Container>
