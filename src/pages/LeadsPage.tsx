@@ -35,6 +35,7 @@ import {
   LeadStatusTextColors,
   LeadStatusUINames,
   ListTimesColors,
+  stringToLeadStatus
 } from "../network/Leads";
 
 function LeadsPage() {
@@ -134,7 +135,7 @@ function LeadsPage() {
                           lead.creator?.role.includes(searchQuery) ||
                           lead.url.includes(searchQuery) ||
                           lead.datePosted.includes(searchQuery) ||
-                          lead.status == 
+                          lead.status.includes(searchQuery.toUpperCase())
                         ) {
                           filteredLeads.push(lead);
                         }
