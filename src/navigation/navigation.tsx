@@ -12,6 +12,7 @@ import Container from "@mui/material/Container";
 import Home from "../pages/Home";
 import SignUp from "../pages/SignUp";
 import CreateLeadPage from "../pages/CreateLeadPage";
+import StatisticPage from "../pages/StatisticPage";
 
 const Routes = () => {
   const {token} = useAuth();
@@ -72,6 +73,10 @@ const Routes = () => {
       {
         path: "/dashboard/leads/create",
         element: <CreateLeadPage/>
+      },
+      {
+        path: "/dashboard/statistics",
+        element: <StatisticPage/>
       }
       ]
     },
@@ -111,6 +116,10 @@ const Routes = () => {
     {
       path: "/dashboard/leads/create",
       element: <CreateLeadPage/>
+    },
+    {
+      path: "/dashboard/statistics",
+      element: <StatisticPage/>
     }
     ]
     :
