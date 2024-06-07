@@ -38,19 +38,11 @@ import {
 
 function LeadsPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const [leadsNotFiltered, setLeads] = useState<LeadResponse[]>([]);
-  const [leads, setFilteredLeads] = useState<LeadResponse[]>([]);
+  const [leads, setLeads] = useState<LeadResponse[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
-
-  useEffect(() => {
-    setFilteredLeads(leadsNotFiltered.filter((lead) =>
-      lead.name.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase())
-    ))
-  }, [searchQuery])
-  
 
   const { token } = useAuth(); // Get the authentication token from context
   useEffect(() => {
