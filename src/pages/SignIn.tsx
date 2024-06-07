@@ -3,10 +3,7 @@ import { Button, InputBase, TextField, Typography } from "@mui/material";
 import "./SignIn.css";
 import { Link, useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
-import Login from "../domain/Login";
 import { useEffect, useState } from "react";
-import { UsersDatabase, AuthenticatedUserDatabase } from "../backend/database";
-import { Role } from "../backend/Role";
 import useRunOnce from "../hooks/userRunOnce";
 import { useAuth } from "../network/AuthProvider";
 import Network from "../network/network";
@@ -18,15 +15,8 @@ import {
 function SingIn() {
   const network = new Network();
 
-  const { setToken } = useAuth();
+  const { setTokenAndName } = useAuth();
   const navigate = useNavigate();
-
-  const users = new UsersDatabase();
-  const loginSystem = new Login(
-    new UsersDatabase(),
-    new AuthenticatedUserDatabase()
-  );
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -45,7 +35,13 @@ function SingIn() {
       if (typeof response.access_token === "string") {
         navigate("/", { replace: true });
         routeToDash();
-        setToken(response.access_token);
+        //response also have refresh_token
+        console.log(response.firstName);
+        setTokenAndName(
+          response.access_token,
+          response.firstName,
+          response.lastName
+        );
       }
       console.log("Login Response:", response);
     } catch (error) {
