@@ -62,6 +62,25 @@ export const RoleUINames: { [key in Role]: string } = {
   [Role.SALES_MANAGER]: "Sales Manager", // Example color for CHATTING
 };
 
+export enum ListTimes {
+  TwelveToFourteen = "12:00-14:00",
+  FourteenToEighteen = "14:00-18:00",
+  EighteenToMidnight = "18:00-00:00",
+  MidnightToFour = "00:00-4:00",
+  FourToEight = "4:00-8:00",
+  EightToTwelve = "8:00-12:00",
+}
+
+// Define the colors for each time range
+export const ListTimesColors: { [key in ListTimes]: string } = {
+  [ListTimes.TwelveToFourteen]: "#CFD8DC", // Example color for 12:00-14:00
+  [ListTimes.FourteenToEighteen]: "#607D8B", // Example color for 14:00-18:00
+  [ListTimes.EighteenToMidnight]: "#546E7A", // Example color for 18:00-00:00
+  [ListTimes.MidnightToFour]: "#455A64", // Example color for 00:00-4:00
+  [ListTimes.FourToEight]: "#37474F", // Example color for 4:00-8:00
+  [ListTimes.EightToTwelve]: "#90A4AE", // Example color for 8:00-12:00
+};
+
 export interface LeadRequest {
   name: string;
   date: string;
@@ -87,7 +106,7 @@ export interface LeadResponse {
   date: string;
   datePosted: string;
   url: string;
-  timeSent: string;
+  timeSent: ListTimes;
   hireRate: number;
   totalSpend: number;
   status: LeadStatus;

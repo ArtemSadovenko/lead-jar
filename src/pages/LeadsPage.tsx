@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useReducer, useState } from "react";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import SidePanel from "../components/SidePanel";
@@ -33,11 +33,24 @@ import {
   LeadStatusBackgroundColors,
   LeadStatusTextColors,
   LeadStatusUINames,
+  ListTimesColors,
 } from "../network/Leads";
 
 function LeadsPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const [leads, setLeads] = useState<LeadResponse[]>([]);
+  const [leadsNotFiltered, setLeads] = useState<LeadResponse[]>([]);
+  const [leads, setFilteredLeads] = useState<LeadResponse[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
+  useEffect(() => {
+    setFilteredLeads(leadsNotFiltered.filter((lead) =>
+      lead.name.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase())
+    ))
+  }, [searchQuery])
+  
 
   const { token } = useAuth(); // Get the authentication token from context
   useEffect(() => {
@@ -100,6 +113,8 @@ function LeadsPage() {
                     borderRadius: "10px",
                   }}
                   inputProps={{ "aria-label": "search" }}
+                  value={searchQuery}
+                  onChange={handleSearch}
                 />
 
                 <IconButton type="button" sx={{ p: "6px" }} aria-label="search">
@@ -152,19 +167,20 @@ function LeadsPage() {
                     <TableHead>
                       <TableRow>
                         <TableCell>LEADGEN</TableCell>
+                        <TableCell align="left">ROLE</TableCell>
                         <TableCell align="left">DATE</TableCell>
                         <TableCell align="left">DATE POSTED</TableCell>
                         <TableCell align="left">STATUS</TableCell>
                         <TableCell align="left">TIME SENT</TableCell>
                         <TableCell align="left">NAME</TableCell>
                         <TableCell align="left">URL</TableCell>
-                        <TableCell align="left">ROLE</TableCell>
+                        <TableCell align="left">HIRE RATE</TableCell>
+                        <TableCell align="left">TOTAL SPEND</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
                       {leads && leads.length > 0
                         ? leads.map((lead) => (
-                            // row.role == 'Sales maneger'?(
                             <TableRow
                               key={lead.name}
                               sx={{
@@ -178,6 +194,9 @@ function LeadsPage() {
                                   " " +
                                   lead.creator?.lastname}
                               </TableCell>
+                              <TableCell component="th" scope="row">
+                                {lead.creator?.role}
+                              </TableCell>
                               <TableCell align="left">{lead.date}</TableCell>
                               <TableCell align="left">
                                 {lead.datePosted}
@@ -190,7 +209,12 @@ function LeadsPage() {
                                       LeadStatusBackgroundColors[lead.status],
                                     color: LeadStatusTextColors[lead.status],
                                     borderRadius: "10px",
-                                    padding: "5px 0px 5px 10px",
+                                    padding: "5px 5px 5px 5px",
+                                    textAlign: "center",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    fontWeight: "bold",
                                   }}
                                 >
                                   {" "}
@@ -200,10 +224,16 @@ function LeadsPage() {
                               <TableCell align="left">
                                 <p
                                   style={{
-                                    backgroundColor: "#F6E5D6",
-                                    color: "#E46027",
+                                    backgroundColor:
+                                      ListTimesColors[lead.timeSent],
+                                    color: "#FFFFFF",
                                     borderRadius: "10px",
-                                    padding: "5px 0px 5px 5px",
+                                    padding: "5px 5px 5px 5px",
+                                    textAlign: "center",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    fontWeight: "bold",
                                   }}
                                 >
                                   {lead.timeSent}
@@ -211,6 +241,12 @@ function LeadsPage() {
                               </TableCell>
                               <TableCell align="left">{lead.name}</TableCell>
                               <TableCell align="left">{lead.url}</TableCell>
+                              <TableCell align="left">
+                                {Math.floor(lead.hireRate) + "$"}
+                              </TableCell>
+                              <TableCell align="left">
+                                {Math.floor(lead.totalSpend) + "$"}
+                              </TableCell>
                             </TableRow>
                             // ):null
                           ))
