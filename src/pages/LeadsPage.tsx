@@ -27,24 +27,20 @@ import useRunOnce from "../hooks/useRunOnce";
 import { useAuth } from "../network/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import Network from "../network/network";
-import { LeadRequest, LeadResponse } from "../network/Leads";
+import { LeadRequest, LeadResponse, LeadStatusBackgroundColors, LeadStatusTextColors, LeadStatusUINames } from "../network/Leads";
 
 function LeadsPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const [newList, setNewList] = useState<LeadResponse[]>([]);
+  const [leads, setLeads] = useState<LeadResponse[]>([]);
 
-  const [userName, setUserName] = useState<string>("");
-
-  const network = new Network();
-  
   const { token } = useAuth(); // Get the authentication token from context
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
         const network = new Network();
-        const leads = await network.getAllLeads();
-        setNewList(leads);
+        const leads_ = await network.getAllLeads();
+        setLeads(leads_);
       } catch (error) {
         console.error("Error fetching leads:", error);
       } finally {
@@ -160,11 +156,11 @@ function LeadsPage() {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {newList && newList.length > 0
-                        ? newList.map((row) => (
+                      {leads && leads.length > 0
+                        ? leads.map((lead) => (
                             // row.role == 'Sales maneger'?(
                             <TableRow
-                              key={row.name}
+                              key={lead.name}
                               sx={{
                                 "&:last-child td, &:last-child th": {
                                   border: 0,
@@ -172,24 +168,24 @@ function LeadsPage() {
                               }}
                             >
                               <TableCell component="th" scope="row">
-                                {row.name}
+                                {lead.name}
                               </TableCell>
-                              <TableCell align="left">{row.date}</TableCell>
+                              <TableCell align="left">{lead.date}</TableCell>
                               <TableCell align="left">
-                                {row.datePosted}
+                                {lead.datePosted}
                               </TableCell>
                               <TableCell align="left">
                                 {" "}
                                 <p
                                   style={{
-                                    backgroundColor: "#E1F7F4",
-                                    color: "#269E8C",
+                                    backgroundColor: LeadStatusBackgroundColors[lead.status],
+                                    color: LeadStatusTextColors[lead.status],
                                     borderRadius: "10px",
                                     padding: "5px 0px 5px 10px",
                                   }}
                                 >
                                   {" "}
-                                  {row.status}
+                                  {LeadStatusUINames[lead.status]}
                                 </p>
                               </TableCell>
                               <TableCell align="left">
@@ -201,11 +197,11 @@ function LeadsPage() {
                                     padding: "5px 0px 5px 5px",
                                   }}
                                 >
-                                  {row.date}
+                                  {lead.date}
                                 </p>
                               </TableCell>
-                              <TableCell align="left">{row.name}</TableCell>
-                              <TableCell align="left">{row.url}</TableCell>
+                              <TableCell align="left">{lead.name}</TableCell>
+                              <TableCell align="left">{lead.url}</TableCell>
                             </TableRow>
                             // ):null
                           ))
