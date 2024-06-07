@@ -1,19 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchPanel from "./SearchPanel";
 import { Container, Button, IconButton, Grid } from "@mui/material";
 import "./TopBar.css";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
-import AddIcon from '@mui/icons-material/Add';
-import useRunOnce from "../hooks/userRunOnce";
+import AddIcon from "@mui/icons-material/Add";
+import { useAuth } from "../network/AuthProvider";
+import Network from "../network/network";
 
 function TopBar() {
   const [userName, setUserName] = useState<string>("");
-  useRunOnce({
-    fn: () => {
+  const network = new Network();
+  const { token } = useAuth();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const me = await network.getMe();
+        setUserName(me.firstname + " " + me.lastname);
+      } catch (error) {
+        console.error("Error fetching leads:", error);
+      } finally {
+      }
+    };
 
+    if (token) {
+      fetchData();
     }
-  }, []);
+  }, [token]);
 
   const navigator = useNavigate();
 
@@ -32,7 +45,7 @@ function TopBar() {
           color="primary"
           sx={{ borderRadius: "25px", backgroundColor: "#706993" }}
           onClick={redirect}
-          endIcon={<AddIcon/>}
+          endIcon={<AddIcon />}
         >
           Add New
         </Button>

@@ -32,12 +32,12 @@ import { LeadRequest, LeadResponse } from "../network/Leads";
 function LeadsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [newList, setNewList] = useState<LeadResponse[]>([]);
-  const { token } = useAuth(); // Get the authentication token from context
 
   const [userName, setUserName] = useState<string>("");
 
   const network = new Network();
-
+  
+  const { token } = useAuth(); // Get the authentication token from context
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);

@@ -3,7 +3,7 @@ import {
   AuthenticationResponse,
   AuthenticationRequest,
 } from "./AuthInterfaces";
-import { LeadRequest, LeadResponse } from "./Leads";
+import { LeadRequest, LeadResponse, Me } from "./Leads";
 import axiosDefault from "../network/axios";
 
 export default class Network {
@@ -131,6 +131,17 @@ export default class Network {
       return response.data;
     } catch (error) {
       return {} as LeadResponse; // Return empty data
+    }
+  }
+
+  public async getMe(): Promise<Me> {
+    try {
+      const response = await axiosDefault.get(
+        `${axiosDefault.defaults.baseURL}/api/v1/users/me`
+      );
+      return response.data;
+    } catch (error) {
+      return {} as Me; // Return empty data
     }
   }
 }

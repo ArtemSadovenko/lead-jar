@@ -15,7 +15,7 @@ import {
 function SingIn() {
   const network = new Network();
 
-  const { setToken } = useAuth();
+  const { setTokenAndName } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,7 +36,12 @@ function SingIn() {
         navigate("/", { replace: true });
         routeToDash();
         //response also have refresh_token
-        setToken(response.access_token);
+        console.log(response.firstName);
+        setTokenAndName(
+          response.access_token,
+          response.firstName,
+          response.lastName
+        );
       }
       console.log("Login Response:", response);
     } catch (error) {

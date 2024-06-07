@@ -14,11 +14,11 @@ import Network from "../network/network";
 
 function SidePanel() {
   const network = new Network();
-  const { setToken } = useAuth();
+  const { setTokenAndName } = useAuth();
   const navigate = useNavigate();
 
   const handleLogOut = async () => {
-    setToken(null);
+    setTokenAndName(null,null,null);
     network.logout();
   };
 

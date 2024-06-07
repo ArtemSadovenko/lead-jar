@@ -3,7 +3,11 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 interface AuthContextType {
   token: string | null;
-  setToken: (newToken: string | null) => void;
+  setTokenAndName: (
+    newToken: string | null,
+    firstName: string | null,
+    secondName: string | null
+  ) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -11,8 +15,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  // State to hold the authentication token
-
   const [token, setToken_] = useState<string | null>(
     localStorage.getItem("token")
   );
@@ -21,11 +23,14 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const setToken = (newToken: string | null) => {
     setToken_(newToken);
   };
+  const setTokenAndName = (
+    newToken: string | null,
+  ) => {
+    setToken_(newToken);
+  };
 
   useEffect(() => {
     if (token) {
-      console.log("token is:");
-      console.log(token);
       axiosDefault.defaults.headers.common["Authorization"] = "Bearer " + token;
       localStorage.setItem("token", token);
     } else {
@@ -38,7 +43,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const contextValue = useMemo(
     () => ({
       token,
-      setToken,
+      setTokenAndName,
     }),
     [token]
   );
