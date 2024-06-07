@@ -1,9 +1,25 @@
+import { MenuItem } from "@mui/material";
+
 // Define the interfaces for the Lead data
 export enum LeadStatus {
   PROPOSAL_SENT = "PROPOSAL_SENT",
   VIEWED = "VIEWED",
   CHATTING = "CHATTING",
   IN_PROGRESS = "IN_PROGRESS",
+}
+
+export function generateLeadStatusMenuItems(): JSX.Element[] {
+  return Object.values(LeadStatus).map((status) => (
+    <MenuItem key={status} value={status}>
+      {LeadStatusUINames[status]}
+    </MenuItem>
+  ));
+}
+
+
+export function stringToLeadStatus(value: string): LeadStatus {
+  const enumValue = Object.values(LeadStatus).find((key) => key === value);
+  return enumValue !== undefined ? enumValue : LeadStatus.PROPOSAL_SENT;
 }
 
 const hexToRgba = (hex: string, alpha: number): string => {
@@ -71,6 +87,19 @@ export enum ListTimes {
   EightToTwelve = "8:00-12:00",
 }
 
+export function stringToTimeSent(value: string): ListTimes {
+  const enumValue = Object.values(ListTimes).find((key) => key === value);
+  return enumValue !== undefined ? enumValue : ListTimes.TwelveToFourteen;
+}
+
+export function generateListTimesMenuItems(): JSX.Element[] {
+  return Object.values(ListTimes).map((time) => (
+    <MenuItem key={time} value={time}>
+      {time}
+    </MenuItem>
+  ));
+}
+
 // Define the colors for each time range
 export const ListTimesColors: { [key in ListTimes]: string } = {
   [ListTimes.TwelveToFourteen]: "#CFD8DC", // Example color for 12:00-14:00
@@ -90,6 +119,7 @@ export interface LeadRequest {
   hireRate: number;
   totalSpend: number;
   status: string;
+  contry: string;
 }
 
 export interface UserResponse {
@@ -113,6 +143,7 @@ export interface LeadResponse {
   creator?: UserResponse;
   created: string; // Use string to represent LocalDateTime
   updated?: string; // Use string to represent LocalDateTime
+  country: string;
 }
 
 export interface Me {

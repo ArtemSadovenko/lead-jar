@@ -15,26 +15,32 @@ import { error } from "console";
 import OutlinedInput from "@mui/material/OutlinedInput";
 
 import Alert from "@mui/material/Alert";
+import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import {
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from "@mui/material";
+  LeadResponse,
+  LeadStatus,
+  generateLeadStatusMenuItems,
+  generateListTimesMenuItems,
+  stringToTimeSent,
+} from "../network/Leads";
+import { useAuth } from "../network/AuthProvider";
+import Network from "../network/network";
 
 function CreateLeadPage() {
   const [globalError, setGlobalError] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const [leadgen, setLeadgen] = useState("");
   const [date, setDate] = useState("");
   const [datePosted, setDatePosted] = useState("");
   const [status, setStatus] = useState("");
   const [time, setTime] = useState("");
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
-  const [rate, setRate] = useState("");
+  const [hireRate, setHireRate] = useState(0);
+  const [totalSpend, setTotalSpend] = useState(0);
+  const [country, setCountry] = useState("");
 
+  const [nameError, setNameError] = useState(false);
   const [dateError, setDateError] = useState(false);
   const [dateFormatError, setDateFormatError] = useState(false);
   const [error, setError] = useState(false);
@@ -42,10 +48,12 @@ function CreateLeadPage() {
   const [datePostedFormatError, setDatePostedFormatError] = useState(false);
   const [hireError, setHireError] = useState(false);
   const [urlError, setUrlError] = useState(false);
-
+  const [countryError, setCountryError] = useState(false);
+  const [evaluation, setEvaluation] = useState("");
 
   const check = () => {
     return (
+      nameError ||
       dateError ||
       dateFormatError ||
       error ||
@@ -53,16 +61,65 @@ function CreateLeadPage() {
       datePostedFormatError ||
       hireError ||
       urlError ||
-      leadgen == "" ||
+      countryError ||
       date == "" ||
       datePosted == "" ||
       status == "" ||
       time == "" ||
       name == "" ||
       url == "" ||
-      rate == ""
+      hireRate == 0 ||
+      country == ""
     );
   };
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [leads, setLeads] = useState<LeadResponse[]>([]);
+  const { token } = useAuth();
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const network = new Network();
+        const leads_ = await network.getAllLeads();
+        setLeads(leads_);
+      } catch (error) {
+        console.error("Error fetching leads:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (token) {
+      fetchData();
+    }
+  }, [token]);
+
+  const evaluate = (): string => {
+    if (time === "" || country === "") return "Not enought Data to evaluate";
+
+    const sameCountryLeads = leads.filter((lead) => lead.country === country);
+    const chattingLeads = sameCountryLeads.filter(
+      (lead) => lead.status === LeadStatus.CHATTING
+    );
+    const evaluatedLeads = chattingLeads.filter(
+      (lead) => lead.timeSent === stringToTimeSent(time)
+    );
+    const percentage = (evaluatedLeads.length / sameCountryLeads.length) * 100;
+
+    if (isNaN(percentage)) {
+      return "Success Rate: " + "0.0%";
+    }
+
+    const formattedPercentage = percentage.toFixed(1) + "%";
+
+    return "Success Rate: " + formattedPercentage;
+  };
+
+  useEffect(() => {
+    const evaluation = evaluate();
+    setEvaluation(evaluation);
+  });
 
   return (
     <Container maxWidth="lg" style={{ padding: 0 }}>
@@ -86,25 +143,32 @@ function CreateLeadPage() {
               <Grid container spacing={0}>
                 <Grid item md={4}>
                   <TextField
-                    onChange={(event) => {
-                      setLeadgen(event.target.value);
-                      if (event.target.value.length > 10) {
-                        setError(true);
-                      } else {
-                        setError(false);
-                      }
-                    }}
-                    value={leadgen}
-                    error={error || globalError ? true : false}
-                    helperText={error ? "Name is out of boundary" : ""}
-                    label="Leadgen"
+                    label="Name"
                     sx={{
                       backgroundColor: "#f5f5fa",
                       margin: "16px 32px 16px 32px",
                       borderRadius: "10px",
                       width: "15em",
                     }}
-                    placeholder="Enter Leadgen"
+                    onChange={(event) => {
+                      setName(event.target.value);
+
+                      if (event.target.value.length < 3) {
+                        setNameError(true); // Reset error state
+                      } else {
+                        setNameError(false); // Reset error state
+                      }
+                    }}
+                    value={name}
+                    placeholder="Enter Name"
+                    error = {
+                      nameError ? true : false
+                    }
+                    helperText={
+                      nameError
+                        ? "Name is too short!"
+                        : ""
+                    }
                   ></TextField>
                 </Grid>
 
@@ -221,7 +285,7 @@ function CreateLeadPage() {
                     error = {globalError}
                   ></TextField> */}
 
-                    <FormControl
+                  <FormControl
                     size="small"
                     sx={{
                       margin: "16px 32px 16px 32px",
@@ -229,9 +293,11 @@ function CreateLeadPage() {
                       height: "3.5em",
                     }}
                   >
-                    <InputLabel sx={{ justifySelf: "center" }}>Proposal Sent</InputLabel>
+                    <InputLabel sx={{ justifySelf: "center" }}>
+                      Proposal Sent
+                    </InputLabel>
                     <Select
-                    error = {globalError}
+                      error={globalError}
                       value={status}
                       onChange={(event) => {
                         setStatus(event.target.value);
@@ -239,16 +305,12 @@ function CreateLeadPage() {
                       sx={{
                         alignItems: "center",
                         backgroundColor: "#f5f5fa",
-
                         width: "15em",
                         height: "3.5em",
                       }}
                       label="Select status"
                     >
-                      <MenuItem value={"Proposal Sent"}>Proposal Sent</MenuItem>
-                      <MenuItem value={"Chatting"}>Chatting</MenuItem>
-                      <MenuItem value={"Viewed"}>Viewed</MenuItem>
-                      <MenuItem value={"In Progress"}>In Progress</MenuItem>
+                      {generateLeadStatusMenuItems()}{" "}
                     </Select>
                   </FormControl>
                 </Grid>
@@ -272,7 +334,7 @@ function CreateLeadPage() {
                   >
                     <InputLabel sx={{ justifySelf: "center" }}>Time</InputLabel>
                     <Select
-                    error = {globalError}
+                      error={globalError}
                       value={time}
                       onChange={(event) => {
                         setTime(event.target.value);
@@ -286,29 +348,10 @@ function CreateLeadPage() {
                       }}
                       label="Time"
                     >
-                      <MenuItem value={"12 - 14"}>12 - 14</MenuItem>
-                      <MenuItem value={"10 - 16"}>10 - 16</MenuItem>
-                      <MenuItem value={"12 - 20"}>12 - 20</MenuItem>
+                      {generateListTimesMenuItems()}{" "}
+                      {/* Call the function here */}
                     </Select>
                   </FormControl>
-                </Grid>
-
-                <Grid item md={4}>
-                  <TextField
-                    label="Name"
-                    sx={{
-                      backgroundColor: "#f5f5fa",
-                      margin: "16px 32px 16px 32px",
-                      borderRadius: "10px",
-                      width: "15em",
-                    }}
-                    onChange={(event) => {
-                      setName(event.target.value);
-                    }}
-                    value={name}
-                    placeholder="Enter Name"
-                    error={globalError}
-                  ></TextField>
                 </Grid>
 
                 <Grid item md={4}>
@@ -338,7 +381,6 @@ function CreateLeadPage() {
                     helperText={urlError ? "Invalid link" : ""}
                   ></TextField>
                 </Grid>
-
                 <Grid item md={4}>
                   <FormControl
                     error={hireError || globalError}
@@ -351,33 +393,68 @@ function CreateLeadPage() {
                     }}
                   >
                     <InputLabel htmlFor="outlined-adornment-amount">
-                      HireRate
+                      Hire Rate
                     </InputLabel>
                     <OutlinedInput
                       onChange={(event) => {
-                        setRate(event.target.value);
-                        if (event.target.value.length > 3) {
+                        // Parse input value to integer
+                        const value = parseInt(event.target.value);
+                        setHireRate(value); // Update state with integer value
+
+                        // Validate input value (between 0 and 100)
+                        if (isNaN(value) || value < 0 || value > 100) {
                           setHireError(true);
                         } else {
                           setHireError(false);
                         }
                       }}
                       id="outlined-adornment-amount"
-                      startAdornment={
-                        <InputAdornment position="start">$</InputAdornment>
-                      }
                       label="Amount"
+                      placeholder="Enter Hire Rate"
                     />
 
                     {hireError && (
                       <FormHelperText error={true}>
-                        Name is out of boundary
+                        Hire rate must be an integer between 0 and 100
                       </FormHelperText>
                     )}
                   </FormControl>
                 </Grid>
-                <Grid item md={8}></Grid>
+                <TextField
+                  label="Country"
+                  sx={{
+                    backgroundColor: "#f5f5fa",
+                    margin: "16px 32px 16px 32px",
+                    borderRadius: "10px",
+                    width: "15em",
+                  }}
+                  onChange={(event) => {
+                    setCountry(event.target.value);
+                  }}
+                  value={country}
+                  placeholder="Enter Country"
+                  error={globalError}
+                />
+                <Grid item md={4}></Grid>
 
+                <Grid
+                  item
+                  md={4}
+                  sx={{
+                    display: "flex",
+                    alignContent: "center",
+                    justifyContent: "flex-start",
+                  }}
+                >
+                  <div
+                    style={{
+                      margin: "16px 0px 16px 32px",
+                    }}
+                  >
+                    {evaluation}
+                  </div>
+                </Grid>
+                <Grid item md={4} />
                 <Grid
                   item
                   md={4}
@@ -400,14 +477,13 @@ function CreateLeadPage() {
                       if (check()) {
                         setGlobalError(true);
                         setSuccess(false);
-
                       } else {
                         setGlobalError(false);
-                        setSuccess(true);     
+                        setSuccess(true);
                       }
                     }}
                   >
-                    Create lead
+                    Create
                   </Button>
                 </Grid>
 
