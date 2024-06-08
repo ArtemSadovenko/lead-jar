@@ -44,11 +44,10 @@ function LeadsPage() {
   const [tableLeads, setTableLeadsLeads] = useState<LeadResponse[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [showTable, SetShowTable] = useState(true);
-  // const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
-  //   setSearchQuery(event.target.value);
-  // };
+  const [status, setStatus] = useState<LeadStatus>(LeadStatus.UNDEFINED)
+  
 
-  const { token } = useAuth(); // Get the authentication token from context
+  const { token } = useAuth(); 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -68,6 +67,11 @@ function LeadsPage() {
       fetchData();
     }
   }, [token]);
+
+
+  const reSetLeads = () =>{
+    setLeads(tableLeads)
+  }
 
   return (
     <Container maxWidth="lg" style={{ padding: 0 }}>
@@ -123,11 +127,12 @@ function LeadsPage() {
                   aria-label="search"
                   onClick={() => {
                     SetShowTable(false);
+                    let resLeads = tableLeads
                     let filteredLeads: LeadResponse[] = [];
                     if (searchQuery.length === 0) {
                       setLeads(tableLeads);
                     } else {
-                      for (const lead of leads) {
+                      for (const lead of resLeads) {
                         if (
                           lead.name.includes(searchQuery) ||
                           lead.creator?.firstname.includes(searchQuery) ||
@@ -155,7 +160,7 @@ function LeadsPage() {
                     padding: "3px 7px 3px 47px",
                   }}
                 >
-                  ROLE
+                  STATUS
                 </h4>
 
                 <FormControl
@@ -177,11 +182,40 @@ function LeadsPage() {
                       borderRadius: "10px",
                     }}
                     label="Any"
+                    value={status}
+                    
+                    onChange={(event) => {
+                      SetShowTable(false)
+                      setIsLoading(true)
+                      let resLeads = tableLeads
+                      
+
+                      const choose = event.target.value; 
+                      // setStatus(event.target.value)
+                      setTimeout(() => {
+
+                      let filteredLeads: LeadResponse[] = [];
+                      
+                        for (const lead of resLeads) {
+                          let stat = lead.status
+                          if (
+                            lead.status.includes(choose)
+                          ) {
+                            filteredLeads.push(lead);
+                          }
+                        }
+                        setLeads(filteredLeads);
+                      
+                        setIsLoading(false)
+                      SetShowTable(true);
+                    }, 1000);
+                    }}
                     // onChange={handleChange}
                   >
-                    <MenuItem value={10}>Lead generator</MenuItem>
-                    <MenuItem value={20}>Sales maneger</MenuItem>
-                    <MenuItem value={30}>Admin</MenuItem>
+                    <MenuItem  value={LeadStatus.CHATTING}>Chatting</MenuItem>
+                    <MenuItem value={LeadStatus.IN_PROGRESS}>In Progress</MenuItem>
+                    <MenuItem value={LeadStatus.PROPOSAL_SENT}>Proposal Sent</MenuItem>
+                    <MenuItem value={LeadStatus.VIEWED}>Viewed</MenuItem>
                   </Select>
                 </FormControl>
               </div>

@@ -2,7 +2,7 @@ import SidePanel from "../components/SidePanel";
 import { Container, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom"
 import useRunOnce from "../hooks/userRunOnce";
-import React from "react";
+import React, { useEffect } from "react";
 import "./Home.css";
 import AiAssistantIcon from "../statis/icons/AiAssistantIcon";
 import BlogIcon from "../statis/icons/BlogIcon";
@@ -12,6 +12,12 @@ import TemplateIcon from "../statis/icons/TemplateIcon";
 import { Link } from "react-router-dom";
 
 function Dashboard() {
+  const navigator = useNavigate();
+
+  useEffect(() =>{
+    navigator("/dashboard")
+  },[])
+
   return (
     <Container maxWidth="lg" style={{ paddingLeft: 0 }}>
       <Grid container spacing={3} sx={{ paddi: 0 }}>
