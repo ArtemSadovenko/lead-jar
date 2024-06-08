@@ -161,14 +161,8 @@ function CreateLeadPage() {
                     }}
                     value={name}
                     placeholder="Enter Name"
-                    error = {
-                      nameError ? true : false
-                    }
-                    helperText={
-                      nameError
-                        ? "Name is too short!"
-                        : ""
-                    }
+                    error={nameError ? true : false}
+                    helperText={nameError ? "Name is too short!" : ""}
                   ></TextField>
                 </Grid>
 

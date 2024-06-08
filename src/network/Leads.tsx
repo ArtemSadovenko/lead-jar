@@ -16,7 +16,6 @@ export function generateLeadStatusMenuItems(): JSX.Element[] {
   ));
 }
 
-
 export function stringToLeadStatus(value: string): LeadStatus {
   const enumValue = Object.values(LeadStatus).find((key) => key === value);
   return enumValue !== undefined ? enumValue : LeadStatus.PROPOSAL_SENT;
