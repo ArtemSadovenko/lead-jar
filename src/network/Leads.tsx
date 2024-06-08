@@ -23,6 +23,8 @@ export function stringToLeadStatus(value: string): LeadStatus {
   return enumValue !== undefined ? enumValue : LeadStatus.PROPOSAL_SENT;
 }
 
+
+
 const hexToRgba = (hex: string, alpha: number): string => {
   const bigint = parseInt(hex.slice(1), 16);
   const r = (bigint >> 16) & 255;

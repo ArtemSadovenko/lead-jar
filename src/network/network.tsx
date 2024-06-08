@@ -3,8 +3,9 @@ import {
   AuthenticationResponse,
   AuthenticationRequest,
 } from "./AuthInterfaces";
-import { LeadRequest, LeadResponse, Me } from "./Leads";
+import { LeadRequest, LeadResponse, Me, UserResponse } from "./Leads";
 import axiosDefault from "../network/axios";
+import { Public } from "@mui/icons-material";
 
 export default class Network {
   public async register(
@@ -144,4 +145,16 @@ export default class Network {
       return {} as Me; // Return empty data
     }
   }
+
+  public async getAllUsers(): Promise<UserResponse[]> {
+    try {
+      const response = await axiosDefault.get(
+        `${axiosDefault.defaults.baseURL}/api/v1/users/all`
+      );
+      return response.data;
+    } catch (error) {
+      return [] as UserResponse[]; // Return empty data
+    }
+  }
 }
+
