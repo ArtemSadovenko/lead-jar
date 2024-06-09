@@ -35,19 +35,48 @@ import {
   LeadStatusTextColors,
   LeadStatusUINames,
   ListTimesColors,
-  stringToLeadStatus
+  stringToLeadStatus,
 } from "../network/Leads";
+
+function containsQuery(value: any, query: string): boolean {
+  if (typeof value === "string") {
+    return value.toLowerCase().includes(query.toLowerCase());
+  } else if (typeof value === "number") {
+    return value.toString().toLowerCase().includes(query.toLowerCase());
+  } else if (typeof value === "object" && value !== null) {
+    return Object.values(value).some((val) => containsQuery(val, query));
+  }
+  return false;
+}
+
+function filterLeads(
+  leads: LeadResponse[],
+  searchQuery?: string,
+  status?: LeadStatus
+): LeadResponse[] {
+  const filteredLeads = leads.filter((lead) => {
+    const matchesQuery = searchQuery
+      ? Object.values(lead).some((value) => containsQuery(value, searchQuery))
+      : true;
+    const matchesStatus = status === undefined || lead.status === status;
+    return matchesQuery && matchesStatus;
+  });
+  return filteredLeads;
+}
 
 function LeadsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [leads, setLeads] = useState<LeadResponse[]>([]);
   const [tableLeads, setTableLeadsLeads] = useState<LeadResponse[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [showTable, SetShowTable] = useState(true);
-  const [status, setStatus] = useState<LeadStatus>(LeadStatus.UNDEFINED)
-  
+  const [status, setStatus] = useState<LeadStatus | undefined>(undefined);
 
-  const { token } = useAuth(); 
+  useEffect(() => {
+    const filtered = filterLeads(leads, searchQuery, status);
+    setTableLeadsLeads(filtered);
+  }, [searchQuery, leads, status]);
+
+  const { token } = useAuth();
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -55,7 +84,6 @@ function LeadsPage() {
         const network = new Network();
         const leads_ = await network.getAllLeads();
         setLeads(leads_);
-        setTableLeadsLeads(leads_);
       } catch (error) {
         console.error("Error fetching leads:", error);
       } finally {
@@ -68,10 +96,9 @@ function LeadsPage() {
     }
   }, [token]);
 
-
-  const reSetLeads = () =>{
-    setLeads(tableLeads)
-  }
+  const reSetLeads = () => {
+    setLeads(tableLeads);
+  };
 
   return (
     <Container maxWidth="lg" style={{ padding: 0 }}>
@@ -117,7 +144,6 @@ function LeadsPage() {
                   value={searchQuery}
                   onChange={(event) => {
                     setSearchQuery(event.target.value);
-                    SetShowTable(false);
                   }}
                 />
 
@@ -126,8 +152,8 @@ function LeadsPage() {
                   sx={{ p: "6px" }}
                   aria-label="search"
                   onClick={() => {
-                    SetShowTable(false);
-                    let resLeads = tableLeads
+                    // SetShowTable(false);
+                    let resLeads = tableLeads;
                     let filteredLeads: LeadResponse[] = [];
                     if (searchQuery.length === 0) {
                       setLeads(tableLeads);
@@ -148,8 +174,6 @@ function LeadsPage() {
                       setLeads(filteredLeads);
                     }
                     setSearchQuery("");
-
-                    SetShowTable(true);
                   }}
                 >
                   <SearchIcon />
@@ -174,48 +198,31 @@ function LeadsPage() {
                     },
                   }}
                 >
-                  <InputLabel sx={{ justifySelf: "center" }}>Any</InputLabel>
+                  <InputLabel sx={{ justifySelf: "center" }}>Status</InputLabel>
                   <Select
                     sx={{
                       alignItems: "center",
                       backgroundColor: "white",
                       borderRadius: "10px",
                     }}
-                    label="Any"
+                    label="Status"
                     value={status}
-                    
                     onChange={(event) => {
-                      SetShowTable(false)
-                      setIsLoading(true)
-                      let resLeads = tableLeads
-                      
-
-                      const choose = event.target.value; 
-                      // setStatus(event.target.value)
-                      setTimeout(() => {
-
-                      let filteredLeads: LeadResponse[] = [];
-                      
-                        for (const lead of resLeads) {
-                          let stat = lead.status
-                          if (
-                            lead.status.includes(choose)
-                          ) {
-                            filteredLeads.push(lead);
-                          }
-                        }
-                        setLeads(filteredLeads);
-                      
-                        setIsLoading(false)
-                      SetShowTable(true);
-                    }, 1000);
+                      const choose = event.target.value;
+                      if (choose == undefined) setStatus(undefined);
+                      else setStatus(stringToLeadStatus(choose));
                     }}
                     // onChange={handleChange}
                   >
-                    <MenuItem  value={LeadStatus.CHATTING}>Chatting</MenuItem>
-                    <MenuItem value={LeadStatus.IN_PROGRESS}>In Progress</MenuItem>
-                    <MenuItem value={LeadStatus.PROPOSAL_SENT}>Proposal Sent</MenuItem>
+                    <MenuItem value={LeadStatus.CHATTING}>Chatting</MenuItem>
+                    <MenuItem value={LeadStatus.IN_PROGRESS}>
+                      In Progress
+                    </MenuItem>
+                    <MenuItem value={LeadStatus.PROPOSAL_SENT}>
+                      Proposal Sent
+                    </MenuItem>
                     <MenuItem value={LeadStatus.VIEWED}>Viewed</MenuItem>
+                    <MenuItem value={undefined}>None</MenuItem>
                   </Select>
                 </FormControl>
               </div>
@@ -241,12 +248,12 @@ function LeadsPage() {
                         <TableCell align="left">TOTAL SPEND</TableCell>
                       </TableRow>
                     </TableHead>
-                    {showTable ? (
+                    {
                       <TableBody>
-                        {leads && leads.length > 0
-                          ? leads.map((lead) => (
+                        {tableLeads && tableLeads.length > 0
+                          ? tableLeads.map((lead) => (
                               <TableRow
-                                key={lead.name}
+                                key={lead.id}
                                 sx={{
                                   "&:last-child td, &:last-child th": {
                                     border: 0,
@@ -316,7 +323,7 @@ function LeadsPage() {
                             ))
                           : null}
                       </TableBody>
-                    ) : null}
+                    }
                   </Table>
                 </TableContainer>
               </div>

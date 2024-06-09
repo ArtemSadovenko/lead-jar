@@ -6,7 +6,6 @@ export enum LeadStatus {
   VIEWED = "VIEWED",
   CHATTING = "CHATTING",
   IN_PROGRESS = "IN_PROGRESS",
-  UNDEFINED = "UNDEFINED"
 }
 
 export function generateLeadStatusMenuItems(): JSX.Element[] {
@@ -16,7 +15,6 @@ export function generateLeadStatusMenuItems(): JSX.Element[] {
     </MenuItem>
   ));
 }
-
 
 export function stringToLeadStatus(value: string): LeadStatus {
   const enumValue = Object.values(LeadStatus).find((key) => key === value);
@@ -41,7 +39,6 @@ export const LeadStatusTextColors: { [key in LeadStatus]: string } = {
   [LeadStatus.VIEWED]: "#F57F17", // Example color for VIEWED
   [LeadStatus.CHATTING]: "#33691E", // Example color for CHATTING
   [LeadStatus.IN_PROGRESS]: "#1A237E", // Example color for IN_PROGRESS
-  [LeadStatus.UNDEFINED]: "#1A237E"
 };
 
 export const LeadStatusBackgroundColors: { [key in LeadStatus]: string } = {
@@ -61,10 +58,6 @@ export const LeadStatusBackgroundColors: { [key in LeadStatus]: string } = {
     LeadStatusTextColors[LeadStatus.IN_PROGRESS],
     ALPHA
   ),
-  [LeadStatus.UNDEFINED]: hexToRgba(
-    LeadStatusTextColors[LeadStatus.IN_PROGRESS],
-    ALPHA
-  ),
 };
 
 export const LeadStatusUINames: { [key in LeadStatus]: string } = {
@@ -72,7 +65,6 @@ export const LeadStatusUINames: { [key in LeadStatus]: string } = {
   [LeadStatus.VIEWED]: "Viewed", // Example color for VIEWED
   [LeadStatus.CHATTING]: "Chatting", // Example color for CHATTING
   [LeadStatus.IN_PROGRESS]: "In Progress", // Example color for IN_PROGRESS
-  [LeadStatus.UNDEFINED]: "Undefined", // Example color for IN_PROGRESS
 };
 
 export enum Role {

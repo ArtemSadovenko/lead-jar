@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
@@ -8,7 +8,7 @@ import TopBar from "../components/TopBar";
 import TextField from "@mui/material/TextField";
 import { Height } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-
+import chatGptRequest from "../chatgpt/chatgpt";
 
 function AssistantPage() {
   const navigator = useNavigate();
@@ -22,25 +22,33 @@ function AssistantPage() {
         <SidePanel />
 
         <Grid item md={9}>
-          
           <TopBar />
-          <div style={{margin: "10px 20px 10px 20px "}}>
-            <Button sx={{
-              color: "black",
-              borderBottom: "solid black 1px",
-              margin: "8px 16px 8px 16px "
-            }} onClick={() =>{
-                navigator("/dashboard/ai-assistant")
-            }}>Ai Asistant</Button>
+          <div style={{ margin: "10px 20px 10px 20px " }}>
             <Button
-            sx={{
-              color: "black",
-              borderBottom: "solid black 1px",
-              margin: "8px 16px 8px 16px "
-            }}  onClick={() =>{
-                navigator("/dashboard/statistics")
-            }}>Statistics</Button>
-         </div>
+              sx={{
+                color: "black",
+                borderBottom: "solid black 1px",
+                margin: "8px 16px 8px 16px ",
+              }}
+              onClick={() => {
+                navigator("/dashboard/ai-assistant");
+              }}
+            >
+              Ai Asistant
+            </Button>
+            <Button
+              sx={{
+                color: "black",
+                borderBottom: "solid black 1px",
+                margin: "8px 16px 8px 16px ",
+              }}
+              onClick={() => {
+                navigator("/dashboard/statistics");
+              }}
+            >
+              Statistics
+            </Button>
+          </div>
           <h2>Get ideas how to improve your letter with A.I.</h2>
 
           <textarea
