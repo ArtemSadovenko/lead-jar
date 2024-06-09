@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
@@ -9,12 +9,22 @@ import TextField from "@mui/material/TextField";
 import { Height } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import chatGptRequest from "../chatgpt/chatgpt";
+import { CoverLetter } from "../network/Leads";
+import Network from "../network/network";
 
 function AssistantPage() {
   const navigator = useNavigate();
+  const [letter, setLetter] = useState("");
+  const network = new Network();
 
-  
+  const sentLetter = async () => {
+    const request: CoverLetter = { text: letter };
+    if (request.text.length != 0) {
+      const res = await network.sentCoverLetter(request);
 
+      setLetter(res.text);
+    }
+  };
 
   return (
     <Container maxWidth="lg" style={{ padding: 0 }}>
@@ -53,7 +63,10 @@ function AssistantPage() {
 
           <textarea
             placeholder="Enter cover letter link to get response from AI Assistant..."
-
+            value={letter}
+            onChange={(event) => {
+              setLetter(event.target.value);
+            }}
             style={{
               borderRadius: "10px",
               borderColor: "white",
@@ -93,14 +106,18 @@ function AssistantPage() {
               Send
             </button>
           </div> */}
-          <Button variant="contained" color="success" sx={{
-            textTransform:"none",
-            color:"white",
-            backgroundColor: "#b8e2ab"
-          }}>
+          <Button
+            variant="contained"
+            color="success"
+            sx={{
+              textTransform: "none",
+              color: "white",
+              backgroundColor: "#b8e2ab",
+            }}
+            onClick={sentLetter}
+          >
             Sent
           </Button>
-          <h1></h1>
         </Grid>
       </Grid>
     </Container>

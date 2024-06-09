@@ -170,7 +170,7 @@ export default class Network {
       );
       return response.data;
     } catch (error) {
-      return {} as CoverLetter; // Return empty data
+      return {text: "loading..."} as CoverLetter; // Return empty data
     }
   }
 }
