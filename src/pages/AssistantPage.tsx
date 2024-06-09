@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 function AssistantPage() {
   const navigator = useNavigate();
 
+  
 
 
   return (
@@ -42,18 +43,9 @@ function AssistantPage() {
          </div>
           <h2>Get ideas how to improve your letter with A.I.</h2>
 
-          {/* <TextField
-            id="textfield"
-            label="paste letter"
-            value={" "}
-            sx={{minWidth: "200px"}}
-            multiline
-            rows={19}
-            variant='outlined'
-          /> */}
-
           <textarea
             placeholder="Enter cover letter link to get response from AI Assistant..."
+
             style={{
               borderRadius: "10px",
               borderColor: "white",
@@ -63,7 +55,7 @@ function AssistantPage() {
             }}
           />
 
-          <h2>Cover Letter Link</h2>
+          {/* <h2>Cover Letter Link</h2>
           <div
             style={{
               display: "flex",
@@ -92,7 +84,15 @@ function AssistantPage() {
             >
               Send
             </button>
-          </div>
+          </div> */}
+          <Button variant="contained" color="success" sx={{
+            textTransform:"none",
+            color:"white",
+            backgroundColor: "#b8e2ab"
+          }}>
+            Sent
+          </Button>
+          <h1></h1>
         </Grid>
       </Grid>
     </Container>

@@ -160,3 +160,7 @@ export interface Me {
   lastname: string;
   email: string;
 }
+
+export interface CoverLetter{
+  text: string
+}
