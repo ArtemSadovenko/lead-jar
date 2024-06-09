@@ -90,7 +90,7 @@ function TeamPage() {
 
   return (
     <Container maxWidth="lg" style={{ padding: 0 }}>
-      <Grid container spacing={3} sx={{ padding: 0 }}>
+      <Grid container spacing={0} sx={{ padding: 0 }}>
         <SidePanel />
 
         <Grid item md={9}>

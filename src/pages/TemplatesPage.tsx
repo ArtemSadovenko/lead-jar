@@ -42,8 +42,8 @@ let content = [
 ];
 
 function TemplatesPage() {
-  const [isDialogOpened, SetIsDialogOpened] = useState(true);
-  const [dialogContent, SetContent] = useState("");
+  const [isDialogOpened, SetIsDialogOpened] = useState(false);
+  const [dialogContent, SetDialogContent] = useState("");
   const [isDialogEditing, SetIsDialogEditing] = useState(false)
   
 
@@ -62,10 +62,10 @@ function TemplatesPage() {
               content.push({ id: id, text: dialogContent });
             }
             SetIsDialogEditing(false)
-            SetContent("")
+            SetDialogContent("")
           }}
         >
-          <DialogTitle id={"2"}>Home</DialogTitle>
+          <DialogTitle id={"2"}>New Draft</DialogTitle>
           <DialogContent>
             <DialogContentText>
               <textarea
@@ -77,7 +77,7 @@ function TemplatesPage() {
                   borderRadius: "10px",
                 }}
                 onChange={(event) => {
-                  SetContent(event.target.value);
+                  SetDialogContent(event.target.value);
                 }}
                 value={dialogContent}
               ></textarea>
@@ -90,7 +90,7 @@ function TemplatesPage() {
                 if(dialogContent){
                   let id = (parseInt(content[content.length - 1].id) + 1).toString()
                   content.push({ id: id, text: dialogContent });                  
-
+                  SetDialogContent("")
                 }
 
                 SetIsDialogOpened(false);
