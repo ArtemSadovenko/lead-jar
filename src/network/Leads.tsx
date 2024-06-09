@@ -153,6 +153,11 @@ export interface Me {
   email: string;
 }
 
-export interface CoverLetter{
-  text: string
+export interface CoverLetterRequest{
+  request: string
+}
+
+
+export interface CoverLetterResponse{
+  response: string
 }

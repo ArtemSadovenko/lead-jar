@@ -9,7 +9,7 @@ import TextField from "@mui/material/TextField";
 import { Height } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import chatGptRequest from "../chatgpt/chatgpt";
-import { CoverLetter } from "../network/Leads";
+import { CoverLetterRequest, CoverLetterResponse } from "../network/Leads";
 import Network from "../network/network";
 
 function AssistantPage() {
@@ -18,11 +18,12 @@ function AssistantPage() {
   const network = new Network();
 
   const sentLetter = async () => {
-    const request: CoverLetter = { text: letter };
-    if (request.text.length != 0) {
-      const res = await network.sentCoverLetter(request);
+    const req: CoverLetterRequest = { request: letter };
+    
+    if (req.request.length != 0) {
+      const res = await network.sentCoverLetter(req);
 
-      setLetter(res.text);
+      setLetter(res.response);
     }
   };
 

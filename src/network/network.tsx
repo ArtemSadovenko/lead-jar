@@ -3,7 +3,7 @@ import {
   AuthenticationResponse,
   AuthenticationRequest,
 } from "./AuthInterfaces";
-import { CoverLetter, LeadRequest, LeadResponse, Me, UserResponse } from "./Leads";
+import { CoverLetterRequest, CoverLetterResponse, LeadRequest, LeadResponse, Me, UserResponse } from "./Leads";
 import axiosDefault from "../network/axios";
 import { Public } from "@mui/icons-material";
 
@@ -157,7 +157,7 @@ export default class Network {
     }
   }
 
-  public async sentCoverLetter(letter: CoverLetter): Promise<CoverLetter> {
+  public async sentCoverLetter(letter: CoverLetterRequest): Promise<CoverLetterResponse> {
     try {
       const response = await axiosDefault.post(
         `${axiosDefault.defaults.baseURL}/api/v1/ai-assistant/sent`,
@@ -170,7 +170,7 @@ export default class Network {
       );
       return response.data;
     } catch (error) {
-      return {text: "loading..."} as CoverLetter; // Return empty data
+      return {response: "loading..."} as CoverLetterResponse; // Return empty data
     }
   }
 }
