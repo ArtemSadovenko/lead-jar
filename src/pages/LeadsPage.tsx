@@ -35,18 +35,41 @@ import {
   LeadStatusTextColors,
   LeadStatusUINames,
   ListTimesColors,
-  stringToLeadStatus
+  stringToLeadStatus,
 } from "../network/Leads";
+
+
+function containsQuery(value: any, query: string): boolean {
+  if (typeof value === 'string') {
+    return value.toLowerCase().includes(query.toLowerCase());
+  } else if (typeof value === 'number') {
+    return value.toString().toLowerCase().includes(query.toLowerCase());
+  } else if (typeof value === 'object' && value !== null) {
+    return Object.values(value).some(val => containsQuery(val, query));
+  }
+  return false;
+}
+
+function filterLeads(leads: LeadResponse[], searchQuery: string): LeadResponse[] {
+  const filteredLeads = leads.filter(lead => {
+    return Object.values(lead).some(value => containsQuery(value, searchQuery));
+  });
+  return filteredLeads.slice(0, 20);
+}
 
 function LeadsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [leads, setLeads] = useState<LeadResponse[]>([]);
   const [tableLeads, setTableLeadsLeads] = useState<LeadResponse[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [showTable, SetShowTable] = useState(true);
-  // const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
-  //   setSearchQuery(event.target.value);
-  // };
+
+  useEffect(() => {
+    if (searchQuery == "") setTableLeadsLeads(leads);
+    else {
+      const filtered = filterLeads(leads, searchQuery)
+      setTableLeadsLeads(filtered);
+    }
+  }, [searchQuery, leads]);
 
   const { token } = useAuth(); // Get the authentication token from context
   useEffect(() => {
@@ -56,7 +79,6 @@ function LeadsPage() {
         const network = new Network();
         const leads_ = await network.getAllLeads();
         setLeads(leads_);
-        setTableLeadsLeads(leads_);
       } catch (error) {
         console.error("Error fetching leads:", error);
       } finally {
@@ -113,7 +135,6 @@ function LeadsPage() {
                   value={searchQuery}
                   onChange={(event) => {
                     setSearchQuery(event.target.value);
-                    SetShowTable(false);
                   }}
                 />
 
@@ -122,7 +143,6 @@ function LeadsPage() {
                   sx={{ p: "6px" }}
                   aria-label="search"
                   onClick={() => {
-                    SetShowTable(false);
                     let filteredLeads: LeadResponse[] = [];
                     if (searchQuery.length === 0) {
                       setLeads(tableLeads);
@@ -143,8 +163,6 @@ function LeadsPage() {
                       setLeads(filteredLeads);
                     }
                     setSearchQuery("");
-
-                    SetShowTable(true);
                   }}
                 >
                   <SearchIcon />
@@ -207,12 +225,12 @@ function LeadsPage() {
                         <TableCell align="left">TOTAL SPEND</TableCell>
                       </TableRow>
                     </TableHead>
-                    {showTable ? (
+                    {
                       <TableBody>
-                        {leads && leads.length > 0
-                          ? leads.map((lead) => (
+                        {tableLeads && tableLeads.length > 0
+                          ? tableLeads.map((lead) => (
                               <TableRow
-                                key={lead.name}
+                                key={lead.id}
                                 sx={{
                                   "&:last-child td, &:last-child th": {
                                     border: 0,
@@ -282,7 +300,7 @@ function LeadsPage() {
                             ))
                           : null}
                       </TableBody>
-                    ) : null}
+                    }
                   </Table>
                 </TableContainer>
               </div>
