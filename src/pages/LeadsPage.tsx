@@ -38,23 +38,30 @@ import {
   stringToLeadStatus,
 } from "../network/Leads";
 
-
 function containsQuery(value: any, query: string): boolean {
-  if (typeof value === 'string') {
+  if (typeof value === "string") {
     return value.toLowerCase().includes(query.toLowerCase());
-  } else if (typeof value === 'number') {
+  } else if (typeof value === "number") {
     return value.toString().toLowerCase().includes(query.toLowerCase());
-  } else if (typeof value === 'object' && value !== null) {
-    return Object.values(value).some(val => containsQuery(val, query));
+  } else if (typeof value === "object" && value !== null) {
+    return Object.values(value).some((val) => containsQuery(val, query));
   }
   return false;
 }
 
-function filterLeads(leads: LeadResponse[], searchQuery: string): LeadResponse[] {
-  const filteredLeads = leads.filter(lead => {
-    return Object.values(lead).some(value => containsQuery(value, searchQuery));
+function filterLeads(
+  leads: LeadResponse[],
+  searchQuery?: string,
+  status?: LeadStatus
+): LeadResponse[] {
+  const filteredLeads = leads.filter((lead) => {
+    const matchesQuery = searchQuery
+      ? Object.values(lead).some((value) => containsQuery(value, searchQuery))
+      : true;
+    const matchesStatus = status === undefined || lead.status === status;
+    return matchesQuery && matchesStatus;
   });
-  return filteredLeads.slice(0, 20);
+  return filteredLeads;
 }
 
 function LeadsPage() {
@@ -62,16 +69,14 @@ function LeadsPage() {
   const [leads, setLeads] = useState<LeadResponse[]>([]);
   const [tableLeads, setTableLeadsLeads] = useState<LeadResponse[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [status, setStatus] = useState<LeadStatus | undefined>(undefined);
 
   useEffect(() => {
-    if (searchQuery == "") setTableLeadsLeads(leads);
-    else {
-      const filtered = filterLeads(leads, searchQuery)
-      setTableLeadsLeads(filtered);
-    }
-  }, [searchQuery, leads]);
+    const filtered = filterLeads(leads, searchQuery, status);
+    setTableLeadsLeads(filtered);
+  }, [searchQuery, leads, status]);
 
-  const { token } = useAuth(); // Get the authentication token from context
+  const { token } = useAuth();
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -90,6 +95,10 @@ function LeadsPage() {
       fetchData();
     }
   }, [token]);
+
+  const reSetLeads = () => {
+    setLeads(tableLeads);
+  };
 
   return (
     <Container maxWidth="lg" style={{ padding: 0 }}>
@@ -143,11 +152,13 @@ function LeadsPage() {
                   sx={{ p: "6px" }}
                   aria-label="search"
                   onClick={() => {
+                    // SetShowTable(false);
+                    let resLeads = tableLeads;
                     let filteredLeads: LeadResponse[] = [];
                     if (searchQuery.length === 0) {
                       setLeads(tableLeads);
                     } else {
-                      for (const lead of leads) {
+                      for (const lead of resLeads) {
                         if (
                           lead.name.includes(searchQuery) ||
                           lead.creator?.firstname.includes(searchQuery) ||
@@ -173,7 +184,7 @@ function LeadsPage() {
                     padding: "3px 7px 3px 47px",
                   }}
                 >
-                  ROLE
+                  STATUS
                 </h4>
 
                 <FormControl
@@ -187,19 +198,31 @@ function LeadsPage() {
                     },
                   }}
                 >
-                  <InputLabel sx={{ justifySelf: "center" }}>Any</InputLabel>
+                  <InputLabel sx={{ justifySelf: "center" }}>Status</InputLabel>
                   <Select
                     sx={{
                       alignItems: "center",
                       backgroundColor: "white",
                       borderRadius: "10px",
                     }}
-                    label="Any"
+                    label="Status"
+                    value={status}
+                    onChange={(event) => {
+                      const choose = event.target.value;
+                      if (choose == undefined) setStatus(undefined);
+                      else setStatus(stringToLeadStatus(choose));
+                    }}
                     // onChange={handleChange}
                   >
-                    <MenuItem value={10}>Lead generator</MenuItem>
-                    <MenuItem value={20}>Sales maneger</MenuItem>
-                    <MenuItem value={30}>Admin</MenuItem>
+                    <MenuItem value={LeadStatus.CHATTING}>Chatting</MenuItem>
+                    <MenuItem value={LeadStatus.IN_PROGRESS}>
+                      In Progress
+                    </MenuItem>
+                    <MenuItem value={LeadStatus.PROPOSAL_SENT}>
+                      Proposal Sent
+                    </MenuItem>
+                    <MenuItem value={LeadStatus.VIEWED}>Viewed</MenuItem>
+                    <MenuItem value={undefined}>None</MenuItem>
                   </Select>
                 </FormControl>
               </div>
